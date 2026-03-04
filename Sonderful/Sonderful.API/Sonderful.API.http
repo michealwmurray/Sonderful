@@ -1,0 +1,6 @@
+@Sonderful.API_HostAddress = http://localhost:5082
+
+GET {{Sonderful.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
