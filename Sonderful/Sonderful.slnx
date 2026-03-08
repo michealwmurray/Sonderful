@@ -1,1 +1,5 @@
-<Solution />
+<Solution>
+  <Project Path="Sonderful.API/Sonderful.API.csproj" />
+  <Project Path="Sonderful.App/Sonderful.App.csproj" />
+  <Project Path="Sonderful.Tests/Sonderful.Tests.csproj" />
+</Solution>
