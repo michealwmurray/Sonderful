@@ -44,6 +44,17 @@ builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<Sonderful.API.Data.AppDbContext>();
+    // Apply pending migrations for SQLite, or EnsureCreated for the InMemory test provider
+    if (db.Database.IsRelational())
+        await db.Database.MigrateAsync();
+    else
+        await db.Database.EnsureCreatedAsync();
+    await Sonderful.API.Data.DbSeeder.SeedAsync(db);
+}
+
 if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 
@@ -57,4 +68,5 @@ app.MapControllers();
 
 app.Run();
 
+// Expose Program for WebApplicationFactory in integration tests
 public partial class Program { }
