@@ -3,12 +3,14 @@
     x:Class="Sonderful.App.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:Sonderful.App"
-    Title="Sonderful.App">
+    xmlns:views="clr-namespace:Sonderful.App.Views"
+    Shell.FlyoutBehavior="Disabled">
 
+    <!-- Auth flow (shown first, no tab bar) -->
     <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
+        Route="LoginPage"
+        ContentTemplate="{DataTemplate views:LoginPage}"
+        Shell.TabBarIsVisible="False" />
+
 
 </Shell>

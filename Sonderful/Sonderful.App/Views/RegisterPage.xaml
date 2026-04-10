@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Sonderful.App.Views.RegisterPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:Sonderful.App.ViewModels"
+    x:DataType="vm:RegisterViewModel"
+    Title=""
+    Shell.NavBarIsVisible="False"
+    BackgroundColor="{StaticResource PageBg}">
+
+    <Grid>
+        <!-- Brand header -->
+        <Border
+            VerticalOptions="Start"
+            BackgroundColor="{StaticResource BrandDark}"
+            Stroke="Transparent"
+            StrokeThickness="0">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="0,0,40,40" />
+            </Border.StrokeShape>
+            <VerticalStackLayout Padding="32,72,32,52" Spacing="6" HorizontalOptions="Center">
+                <Label
+                    Text="✦"
+                    FontFamily="JakartaExtraBold"
+                    FontSize="40"
+                    TextColor="White"
+                    HorizontalOptions="Center" />
+                <Label
+                    Text="Join Sonderful"
+                    FontFamily="JakartaExtraBold"
+                    FontSize="32"
+                    TextColor="White"
+                    HorizontalOptions="Center" />
+                <Label
+                    Text="Meet people, make plans"
+                    FontFamily="JakartaRegular"
+                    FontSize="15"
+                    TextColor="#CCFFFFFF"
+                    HorizontalOptions="Center" />
+            </VerticalStackLayout>
+        </Border>
+
+        <!-- Form scrolls over the header -->
+        <ScrollView Margin="0,210,0,0">
+            <VerticalStackLayout Padding="24,0,24,40" Spacing="0">
+
+                <!-- White card -->
+                <Border
+                    BackgroundColor="{StaticResource Surface}"
+                    Stroke="Transparent"
+                    StrokeThickness="0">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="24" />
+                    </Border.StrokeShape>
+                    <Border.Shadow>
+                        <Shadow Brush="{StaticResource BlackBrush}" Opacity="0.08" Offset="0,4" Radius="20" />
+                    </Border.Shadow>
+
+                    <VerticalStackLayout Padding="28,28,28,32" Spacing="16">
+
+                        <Label
+                            Text="Create account"
+                            FontFamily="JakartaBold"
+                            FontSize="22"
+                            TextColor="{StaticResource Ink}" />
+
+                        <Border Style="{StaticResource InputFieldBorder}">
+                            <Entry
+                                Placeholder="Username"
+                                Text="{Binding Username}"
+                                HeightRequest="52"
+                                BackgroundColor="Transparent" />
+                        </Border>
+
+                        <Border Style="{StaticResource InputFieldBorder}">
+                            <Entry
+                                Placeholder="Email address"
+                                Text="{Binding Email}"
+                                Keyboard="Email"
+                                HeightRequest="52"
+                                BackgroundColor="Transparent" />
+                        </Border>
+
+                        <Border Style="{StaticResource InputFieldBorder}">
+                            <Entry
+                                Placeholder="Password"
+                                Text="{Binding Password}"
+                                IsPassword="True"
+                                HeightRequest="52"
+                                BackgroundColor="Transparent" />
+                        </Border>
+
+                        <Button
+                            Text="Create Account"
+                            Command="{Binding RegisterCommand}"
+                            Margin="0,8,0,0" />
+
+                    </VerticalStackLayout>
+                </Border>
+
+                <Button
+                    Text="Already have an account? Log in"
+                    Command="{Binding GoToLoginCommand}"
+                    BackgroundColor="Transparent"
+                    TextColor="{StaticResource Brand}"
+                    FontFamily="JakartaMedium"
+                    FontSize="14"
+                    HeightRequest="48"
+                    Margin="0,12,0,0" />
+
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+
+</ContentPage>
