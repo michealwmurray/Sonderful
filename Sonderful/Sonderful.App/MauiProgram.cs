@@ -1,4 +1,7 @@
 using Microsoft.Extensions.Logging;
+using Sonderful.App.Services;
+using Sonderful.App.ViewModels;
+using Sonderful.App.Views;
 
 namespace Sonderful.App;
 
@@ -20,6 +23,15 @@ public static class MauiProgram
 
         // Remove default platform borders from inputs
         RemoveNativeInputBorders();
+
+        builder.Services.AddSingleton<SessionService>();
+        builder.Services.AddSingleton<IApiService>(sp =>
+            new ApiService(new HttpClient(), sp.GetRequiredService<SessionService>()));
+
+        builder.Services.AddTransient<LoginPage>();
+        builder.Services.AddTransient<LoginViewModel>();
+        builder.Services.AddTransient<RegisterPage>();
+        builder.Services.AddTransient<RegisterViewModel>();
 
 #if DEBUG
         builder.Logging.AddDebug();
