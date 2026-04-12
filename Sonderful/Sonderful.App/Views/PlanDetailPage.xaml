@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Sonderful.App.Views.PlanDetailPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:Sonderful.App.ViewModels"
+    xmlns:dto="clr-namespace:Sonderful.App.DTOs"
+    x:DataType="vm:PlanDetailViewModel"
+    Title=""
+    Shell.NavBarIsVisible="False"
+    BackgroundColor="{StaticResource PageBg}">
+
+    <Grid RowDefinitions="*,Auto">
+
+        <!-- ── Main scrollable content ── -->
+        <ScrollView Grid.Row="0">
+            <VerticalStackLayout Spacing="0">
+
+                <!-- Hero header -->
+                <Border
+                    BackgroundColor="{StaticResource Brand}"
+                    Stroke="Transparent"
+                    StrokeThickness="0">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="0,0,36,36" />
+                    </Border.StrokeShape>
+
+                    <Grid RowDefinitions="Auto,Auto" Padding="24,52,24,32" RowSpacing="16">
+
+                        <!-- Back + creator row -->
+                        <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10">
+                            <Button
+                                Grid.Column="0"
+                                Text="←"
+                                BackgroundColor="Transparent"
+                                TextColor="White"
+                                FontSize="22"
+                                Padding="0"
+                                WidthRequest="40"
+                                HeightRequest="40"
+                                Command="{Binding GoBackCommand}" />
+
+                            <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="1">
+                                <Label
+                                    Text="{Binding Plan.Category}"
+                                    FontFamily="JakartaMedium"
+                                    FontSize="12"
+                                    TextColor="#CCFFFFFF" />
+                                <Label
+                                    Text="{Binding Plan.Title}"
+                                    FontFamily="JakartaExtraBold"
+                                    FontSize="22"
+                                    TextColor="White"
+                                    LineBreakMode="WordWrap" />
+                            </VerticalStackLayout>
+
+                            <!-- RSVP badge -->
+                            <Border
+                                Grid.Column="2"
+                                BackgroundColor="#33FFFFFF"
+                                Stroke="Transparent"
+                                StrokeThickness="0"
+                                Padding="14,10"
+                                VerticalOptions="Center">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="14" />
+                                </Border.StrokeShape>
+                                <VerticalStackLayout Spacing="1" HorizontalOptions="Center">
+                                    <Label
+                                        Text="{Binding Plan.RsvpCount}"
+                                        FontFamily="JakartaExtraBold"
+                                        FontSize="20"
+                                        TextColor="White"
+                                        HorizontalOptions="Center" />
+                                    <Label
+                                        Text="going"
+                                        FontFamily="JakartaRegular"
+                                        FontSize="11"
+                                        TextColor="#CCFFFFFF"
+                                        HorizontalOptions="Center" />
+                                </VerticalStackLayout>
+                            </Border>
+                        </Grid>
+
+                        <!-- Meta row -->
+                        <HorizontalStackLayout Grid.Row="1" Spacing="20">
+                            <VerticalStackLayout Spacing="2">
+                                <Label
+                                    Text="When"
+                                    FontFamily="JakartaSemiBold"
+                                    FontSize="11"
+                                    TextColor="#99FFFFFF" />
+                                <Label
+                                    Text="{Binding Plan.ScheduledAt, StringFormat='{0:ddd d MMM · HH:mm}'}"
+                                    FontFamily="JakartaSemiBold"
+                                    FontSize="14"
+                                    TextColor="White" />
+                            </VerticalStackLayout>
+                            <VerticalStackLayout Spacing="2">
+                                <Label
+                                    Text="Host"
+                                    FontFamily="JakartaSemiBold"
+                                    FontSize="11"
+                                    TextColor="#99FFFFFF" />
+                                <Label
+                                    Text="{Binding Plan.CreatorUsername}"
+                                    FontFamily="JakartaSemiBold"
+                                    FontSize="14"
+                                    TextColor="White" />
+                            </VerticalStackLayout>
+                            <VerticalStackLayout Spacing="2">
+                                <Label
+                                    Text="Capacity"
+                                    FontFamily="JakartaSemiBold"
+                                    FontSize="11"
+                                    TextColor="#99FFFFFF" />
+                                <Label
+                                    Text="{Binding Plan.GoingLabel}"
+                                    FontFamily="JakartaSemiBold"
+                                    FontSize="14"
+                                    TextColor="White" />
+                            </VerticalStackLayout>
+                        </HorizontalStackLayout>
+
+                    </Grid>
+                </Border>
+
+                <!-- Content cards -->
+                <VerticalStackLayout Padding="20,20,20,8" Spacing="16">
+
+                    <!-- About card -->
+                    <Border Style="{StaticResource CardBorder}">
+                        <VerticalStackLayout Spacing="12">
+                            <Label
+                                Text="About this plan"
+                                FontFamily="JakartaBold"
+                                FontSize="16"
+                                TextColor="{StaticResource Ink}" />
+                            <Label
+                                Text="{Binding Plan.Description}"
+                                FontFamily="JakartaRegular"
+                                FontSize="14"
+                                TextColor="{StaticResource InkSecondary}"
+                                LineHeight="1.5" />
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!-- RSVP / action buttons -->
+                    <Button
+                        Text="{Binding RsvpButtonText}"
+                        Command="{Binding ToggleRsvpCommand}" />
+
+                    <!-- Creator controls -->
+                    <Grid
+                        ColumnDefinitions="*,Auto"
+                        ColumnSpacing="12"
+                        IsVisible="{Binding IsCreator}">
+                        <Button
+                            Grid.Column="0"
+                            Text="Edit Plan"
+                            Command="{Binding EditPlanCommand}"
+                            Style="{StaticResource OutlineButton}" />
+                        <Button
+                            Grid.Column="1"
+                            Text="Delete"
+                            Command="{Binding DeletePlanCommand}"
+                            Style="{StaticResource DangerButton}"
+                            WidthRequest="110" />
+                    </Grid>
+
+                    <Button
+                        Text="Rate Attendees"
+                        Command="{Binding RateAttendeesCommand}"
+                        IsVisible="{Binding IsCreatorAndPast}"
+                        Style="{StaticResource BrandButton}" />
+
+                    <!-- Photos section -->
+                    <Border Style="{StaticResource CardBorder}">
+                        <VerticalStackLayout Spacing="14">
+
+                            <Grid ColumnDefinitions="*,Auto">
+                                <Label
+                                    Grid.Column="0"
+                                    Text="Photos"
+                                    FontFamily="JakartaBold"
+                                    FontSize="16"
+                                    TextColor="{StaticResource Ink}"
+                                    VerticalOptions="Center" />
+                                <Button
+                                    Grid.Column="1"
+                                    Text="+ Add"
+                                    Command="{Binding UploadPhotoCommand}"
+                                    IsVisible="{Binding IsCreator}"
+                                    BackgroundColor="{StaticResource BrandLight}"
+                                    TextColor="{StaticResource Brand}"
+                                    FontFamily="JakartaSemiBold"
+                                    FontSize="13"
+                                    CornerRadius="10"
+                                    HeightRequest="34"
+                                    Padding="12,0" />
+                            </Grid>
+
+                            <CollectionView
+                                ItemsSource="{Binding Photos}"
+                                IsVisible="{Binding HasPhotos}">
+                                <CollectionView.ItemsLayout>
+                                    <GridItemsLayout Orientation="Vertical" Span="3" />
+                                </CollectionView.ItemsLayout>
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate x:DataType="vm:PlanPhotoItem">
+                                        <Grid Padding="3">
+                                            <Border StrokeThickness="0">
+                                                <Border.StrokeShape>
+                                                    <RoundRectangle CornerRadius="10" />
+                                                </Border.StrokeShape>
+                                                <Image
+                                                    Source="{Binding Url}"
+                                                    Aspect="AspectFill"
+                                                    HeightRequest="100">
+                                                    <Image.GestureRecognizers>
+                                                        <TapGestureRecognizer
+                                                            Command="{Binding Source={RelativeSource AncestorType={x:Type vm:PlanDetailViewModel}}, Path=ViewPhotoCommand}"
+                                                            CommandParameter="{Binding .}" />
+                                                    </Image.GestureRecognizers>
+                                                </Image>
+                                            </Border>
+                                            <Button
+                                                Text="✕"
+                                                BackgroundColor="#AA000000"
+                                                TextColor="White"
+                                                FontSize="10"
+                                                HeightRequest="26"
+                                                WidthRequest="26"
+                                                Padding="0"
+                                                CornerRadius="13"
+                                                HorizontalOptions="End"
+                                                VerticalOptions="Start"
+                                                Margin="4"
+                                                IsVisible="{Binding Source={RelativeSource AncestorType={x:Type vm:PlanDetailViewModel}}, Path=IsCreator}"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:PlanDetailViewModel}}, Path=DeletePhotoCommand}"
+                                                CommandParameter="{Binding .}" />
+                                        </Grid>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+
+                            <Label
+                                Text="No photos yet."
+                                FontFamily="JakartaRegular"
+                                FontSize="13"
+                                TextColor="{StaticResource InkMuted}"
+                                IsVisible="{Binding HasNoPhotos}" />
+
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!-- Comments section -->
+                    <Border Style="{StaticResource CardBorder}">
+                        <VerticalStackLayout Spacing="12">
+
+                            <Label
+                                Text="Comments"
+                                FontFamily="JakartaBold"
+                                FontSize="16"
+                                TextColor="{StaticResource Ink}" />
+
+                            <CollectionView ItemsSource="{Binding Comments}">
+                                <CollectionView.EmptyView>
+                                    <Label
+                                        Text="No comments yet. Be the first!"
+                                        FontFamily="JakartaRegular"
+                                        FontSize="13"
+                                        TextColor="{StaticResource InkMuted}" />
+                                </CollectionView.EmptyView>
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate x:DataType="dto:CommentResponse">
+                                        <Grid
+                                            ColumnDefinitions="*,Auto"
+                                            Padding="0,6"
+                                            ColumnSpacing="8">
+                                            <VerticalStackLayout Grid.Column="0" Spacing="2">
+                                                <Label
+                                                    Text="{Binding Username}"
+                                                    FontFamily="JakartaSemiBold"
+                                                    FontSize="13"
+                                                    TextColor="{StaticResource Ink}" />
+                                                <Label
+                                                    Text="{Binding Content}"
+                                                    FontFamily="JakartaRegular"
+                                                    FontSize="14"
+                                                    TextColor="{StaticResource InkSecondary}" />
+                                            </VerticalStackLayout>
+                                            <Button
+                                                Grid.Column="1"
+                                                Text="✕"
+                                                BackgroundColor="Transparent"
+                                                TextColor="{StaticResource Danger}"
+                                                FontSize="14"
+                                                HeightRequest="36"
+                                                WidthRequest="36"
+                                                Padding="0"
+                                                VerticalOptions="Center"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:PlanDetailViewModel}}, Path=DeleteCommentCommand}"
+                                                CommandParameter="{Binding .}" />
+                                        </Grid>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+
+                        </VerticalStackLayout>
+                    </Border>
+
+                </VerticalStackLayout>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- ── Comment input bar (pinned bottom) ── -->
+        <Border
+            Grid.Row="1"
+            BackgroundColor="{StaticResource Surface}"
+            Stroke="{StaticResource InputBorder}"
+            StrokeThickness="1">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="0" />
+            </Border.StrokeShape>
+            <Grid
+                ColumnDefinitions="*,Auto"
+                ColumnSpacing="10"
+                Padding="16,10">
+                <Border
+                    Grid.Column="0"
+                    Style="{StaticResource InputFieldBorder}">
+                    <Entry
+                        Placeholder="Add a comment…"
+                        Text="{Binding NewComment}"
+                        HeightRequest="46"
+                        BackgroundColor="Transparent" />
+                </Border>
+                <Button
+                    Grid.Column="1"
+                    Text="Post"
+                    Command="{Binding PostCommentCommand}"
+                    CornerRadius="14"
+                    HeightRequest="46"
+                    WidthRequest="72"
+                    FontSize="15"
+                    Padding="0" />
+            </Grid>
+        </Border>
+
+    </Grid>
+
+</ContentPage>

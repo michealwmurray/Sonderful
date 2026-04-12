@@ -12,5 +12,13 @@
         ContentTemplate="{DataTemplate views:LoginPage}"
         Shell.TabBarIsVisible="False" />
 
+    <!-- Main app tabs -->
+    <TabBar>
+        <Tab Title="Discover">
+            <ShellContent
+                Route="DiscoverPage"
+                ContentTemplate="{DataTemplate views:DiscoverPage}" />
+        </Tab>
+    </TabBar>
 
 </Shell>

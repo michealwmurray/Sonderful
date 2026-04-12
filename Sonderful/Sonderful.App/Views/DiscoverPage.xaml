@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Sonderful.App.Views.DiscoverPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:Sonderful.App.ViewModels"
+    xmlns:dto="clr-namespace:Sonderful.App.DTOs"
+    x:DataType="vm:DiscoverViewModel"
+    Title=""
+    Shell.NavBarIsVisible="False"
+    BackgroundColor="{StaticResource PageBg}">
+
+    <Grid RowDefinitions="Auto,*">
+
+        <!-- ── Header ── -->
+        <Border
+            Grid.Row="0"
+            BackgroundColor="{StaticResource Brand}"
+            Stroke="Transparent"
+            StrokeThickness="0">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="0,0,32,32" />
+            </Border.StrokeShape>
+            <Grid ColumnDefinitions="*,Auto" Padding="24,52,24,24" VerticalOptions="Center">
+                <VerticalStackLayout Grid.Column="0" Spacing="3">
+                    <Label
+                        Text="Discover"
+                        FontFamily="JakartaExtraBold"
+                        FontSize="30"
+                        TextColor="White" />
+                    <Label
+                        Text="{Binding SearchLabel}"
+                        FontFamily="JakartaRegular"
+                        FontSize="14"
+                        TextColor="#CCFFFFFF" />
+                </VerticalStackLayout>
+                <HorizontalStackLayout Grid.Column="1" Spacing="8" VerticalOptions="Center">
+                    <Button
+                        Text="My Plans"
+                        Command="{Binding ToggleMyPlansCommand}"
+                        BackgroundColor="White"
+                        TextColor="{StaticResource Brand}"
+                        FontFamily="JakartaSemiBold"
+                        FontSize="14"
+                        CornerRadius="14"
+                        HeightRequest="44"
+                        Padding="16,0">
+                        <Button.Triggers>
+                            <DataTrigger TargetType="Button" Binding="{Binding IsMyPlansMode}" Value="True">
+                                <Setter Property="BackgroundColor" Value="{StaticResource Brand}" />
+                                <Setter Property="TextColor" Value="White" />
+                            </DataTrigger>
+                        </Button.Triggers>
+                    </Button>
+                    <Button
+                        Text="Refine"
+                        Command="{Binding OpenRefineCommand}"
+                        BackgroundColor="White"
+                        TextColor="{StaticResource Brand}"
+                        FontFamily="JakartaSemiBold"
+                        FontSize="14"
+                        CornerRadius="14"
+                        HeightRequest="44"
+                        Padding="16,0" />
+                </HorizontalStackLayout>
+            </Grid>
+        </Border>
+
+        <!-- ── Plan list ── -->
+        <CollectionView
+            Grid.Row="1"
+            ItemsSource="{Binding Plans}"
+            SelectionMode="Single"
+            SelectedItem="{Binding SelectedPlan, Mode=TwoWay}"
+            Margin="0,12,0,0">
+
+            <CollectionView.EmptyView>
+                <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="10" Margin="0,60,0,0">
+                    <Label
+                        Text="No plans found"
+                        FontFamily="JakartaBold"
+                        FontSize="18"
+                        TextColor="{StaticResource InkMuted}"
+                        HorizontalOptions="Center" />
+                    <Label
+                        Text="Tap Refine to adjust your search area or category"
+                        FontFamily="JakartaRegular"
+                        FontSize="14"
+                        TextColor="{StaticResource InkMuted}"
+                        HorizontalOptions="Center"
+                        HorizontalTextAlignment="Center"
+                        MaximumWidthRequest="260" />
+                </VerticalStackLayout>
+            </CollectionView.EmptyView>
+
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout Orientation="Vertical" ItemSpacing="12" />
+            </CollectionView.ItemsLayout>
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="dto:PlanResponse">
+                    <Border
+                        Margin="16,0"
+                        BackgroundColor="{StaticResource Surface}"
+                        Stroke="Transparent"
+                        StrokeThickness="0">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="18" />
+                        </Border.StrokeShape>
+                        <Border.Shadow>
+                            <Shadow Brush="Black" Opacity="0.06" Offset="0,3" Radius="12" />
+                        </Border.Shadow>
+
+                        <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto" Padding="18,16" RowSpacing="6">
+
+                            <Label
+                                Grid.Row="0" Grid.Column="0"
+                                Text="{Binding Title}"
+                                FontFamily="JakartaBold"
+                                FontSize="16"
+                                TextColor="{StaticResource Ink}"
+                                LineBreakMode="TailTruncation" />
+
+                            <!-- Attendee badge -->
+                            <Border
+                                Grid.Row="0" Grid.Column="1" Grid.RowSpan="3"
+                                BackgroundColor="{StaticResource BrandLight}"
+                                Stroke="Transparent"
+                                StrokeThickness="0"
+                                Padding="12,8"
+                                VerticalOptions="Center"
+                                Margin="12,0,0,0">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="12" />
+                                </Border.StrokeShape>
+                                <VerticalStackLayout Spacing="1" HorizontalOptions="Center">
+                                    <Label
+                                        Text="{Binding GoingLabel}"
+                                        FontFamily="JakartaBold"
+                                        FontSize="12"
+                                        TextColor="{StaticResource Brand}"
+                                        HorizontalOptions="Center" />
+                                    <Label
+                                        Text="{Binding SpotsLeft, StringFormat='{0} left'}"
+                                        FontFamily="JakartaRegular"
+                                        FontSize="11"
+                                        TextColor="{StaticResource BrandDark}"
+                                        HorizontalOptions="Center" />
+                                </VerticalStackLayout>
+                            </Border>
+
+                            <!-- Category chip -->
+                            <Border
+                                Grid.Row="1" Grid.Column="0"
+                                BackgroundColor="{StaticResource InputBg}"
+                                Stroke="Transparent"
+                                StrokeThickness="0"
+                                Padding="10,4"
+                                HorizontalOptions="Start">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="8" />
+                                </Border.StrokeShape>
+                                <Label
+                                    Text="{Binding Category}"
+                                    FontFamily="JakartaMedium"
+                                    FontSize="12"
+                                    TextColor="{StaticResource InkSecondary}" />
+                            </Border>
+
+                            <Label
+                                Grid.Row="2" Grid.Column="0"
+                                Text="{Binding ScheduledAt, StringFormat='{0:ddd d MMM, HH:mm}'}"
+                                FontFamily="JakartaRegular"
+                                FontSize="13"
+                                TextColor="{StaticResource InkMuted}" />
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <!-- Loading overlay -->
+        <ActivityIndicator
+            Grid.Row="1"
+            IsRunning="{Binding IsBusy}"
+            IsVisible="{Binding IsBusy}"
+            VerticalOptions="Center"
+            HorizontalOptions="Center" />
+
+        <!-- ── Refine overlay (spans full page) ── -->
+        <Grid
+            Grid.Row="0"
+            Grid.RowSpan="2"
+            IsVisible="{Binding IsRefineOpen}">
+
+            <!-- Dimmed backdrop — tap to dismiss -->
+            <Grid BackgroundColor="#99000000">
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding CloseRefineCommand}" />
+                </Grid.GestureRecognizers>
+            </Grid>
+
+            <!-- Bottom sheet panel -->
+            <Border
+                VerticalOptions="End"
+                BackgroundColor="{StaticResource Surface}"
+                Stroke="Transparent"
+                StrokeThickness="0">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="28,28,0,0" />
+                </Border.StrokeShape>
+                <Border.Shadow>
+                    <Shadow Brush="Black" Opacity="0.18" Offset="0,-4" Radius="24" />
+                </Border.Shadow>
+
+                <VerticalStackLayout Padding="24,20,24,36" Spacing="20">
+
+                    <!-- Handle + title row -->
+                    <Grid ColumnDefinitions="*,Auto">
+                        <VerticalStackLayout Grid.Column="0" Spacing="8">
+                            <!-- Drag handle pill -->
+                            <Border
+                                HeightRequest="4"
+                                WidthRequest="40"
+                                BackgroundColor="{StaticResource Gray300}"
+                                Stroke="Transparent"
+                                StrokeThickness="0"
+                                HorizontalOptions="Start">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="2" />
+                                </Border.StrokeShape>
+                            </Border>
+                            <Label
+                                Text="Refine Search"
+                                FontFamily="JakartaBold"
+                                FontSize="20"
+                                TextColor="{StaticResource Ink}" />
+                        </VerticalStackLayout>
+                        <Button
+                            Grid.Column="1"
+                            Text="✕"
+                            Command="{Binding CloseRefineCommand}"
+                            BackgroundColor="Transparent"
+                            TextColor="{StaticResource InkMuted}"
+                            FontSize="18"
+                            HeightRequest="40"
+                            WidthRequest="40"
+                            Padding="0"
+                            VerticalOptions="Start" />
+                    </Grid>
+
+                    <!-- County -->
+                    <VerticalStackLayout Spacing="8">
+                        <Label
+                            Text="County"
+                            FontFamily="JakartaSemiBold"
+                            FontSize="13"
+                            TextColor="{StaticResource InkSecondary}" />
+                        <Border Style="{StaticResource InputFieldBorder}">
+                            <Picker
+                                Title="All counties (use GPS)"
+                                ItemsSource="{Binding Counties}"
+                                SelectedItem="{Binding SelectedCounty}"
+                                HeightRequest="52"
+                                BackgroundColor="Transparent" />
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!-- Distance -->
+                    <VerticalStackLayout Spacing="8">
+                        <Label
+                            Text="Distance (km) — used when no county selected"
+                            FontFamily="JakartaSemiBold"
+                            FontSize="13"
+                            TextColor="{StaticResource InkSecondary}" />
+                        <Border Style="{StaticResource InputFieldBorder}">
+                            <Entry
+                                Placeholder="75"
+                                Text="{Binding RadiusKm}"
+                                Keyboard="Numeric"
+                                HeightRequest="52"
+                                BackgroundColor="Transparent" />
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!-- Category -->
+                    <VerticalStackLayout Spacing="8">
+                        <Label
+                            Text="Category"
+                            FontFamily="JakartaSemiBold"
+                            FontSize="13"
+                            TextColor="{StaticResource InkSecondary}" />
+                        <Border Style="{StaticResource InputFieldBorder}">
+                            <Picker
+                                Title="All categories"
+                                ItemsSource="{Binding Categories}"
+                                SelectedItem="{Binding SelectedCategory}"
+                                HeightRequest="52"
+                                BackgroundColor="Transparent" />
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!-- Date filter -->
+                    <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
+                        <CheckBox
+                            Grid.Column="0"
+                            IsChecked="{Binding DateFilterEnabled}"
+                            VerticalOptions="Center" />
+                        <Label
+                            Grid.Column="1"
+                            Text="Filter by date"
+                            FontFamily="JakartaMedium"
+                            FontSize="14"
+                            TextColor="{StaticResource InkSecondary}"
+                            VerticalOptions="Center" />
+                        <DatePicker
+                            Grid.Column="2"
+                            Date="{Binding FilterDate}"
+                            IsEnabled="{Binding DateFilterEnabled}"
+                            FontFamily="JakartaRegular"
+                            FontSize="14"
+                            HeightRequest="48"
+                            BackgroundColor="Transparent" />
+                    </Grid>
+
+                    <!-- Refine button -->
+                    <Button
+                        Text="Refine"
+                        Command="{Binding ApplyRefineCommand}"
+                        Margin="0,4,0,0" />
+
+                </VerticalStackLayout>
+            </Border>
+
+        </Grid>
+
+    </Grid>
+
+</ContentPage>
