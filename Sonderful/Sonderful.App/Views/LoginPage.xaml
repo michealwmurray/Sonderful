@@ -65,12 +65,10 @@
                             FontSize="22"
                             TextColor="{StaticResource Ink}" />
 
-                        <!-- Email field -->
                         <Border Style="{StaticResource InputFieldBorder}">
                             <Entry
-                                Placeholder="Email address"
-                                Text="{Binding Email}"
-                                Keyboard="Email"
+                                Placeholder="Email or username"
+                                Text="{Binding Identifier}"
                                 HeightRequest="52"
                                 BackgroundColor="Transparent" />
                         </Border>

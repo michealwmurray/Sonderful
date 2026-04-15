@@ -16,7 +16,7 @@ public partial class LoginViewModel : ObservableObject
     }
 
     [ObservableProperty]
-    private string _email = string.Empty;
+    private string _identifier = string.Empty;
 
     [ObservableProperty]
     private string _password = string.Empty;
@@ -32,7 +32,7 @@ public partial class LoginViewModel : ObservableObject
         IsBusy = true;
         try
         {
-            var response = await _api.LoginAsync(Email, Password);
+            var response = await _api.LoginAsync(Identifier, Password);
             _session.SetSession(response);
             await Shell.Current.GoToAsync("//DiscoverPage");
         }

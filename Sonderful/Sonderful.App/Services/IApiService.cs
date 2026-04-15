@@ -5,7 +5,7 @@ namespace Sonderful.App.Services;
 public interface IApiService
 {
     // Auth
-    Task<AuthResponse> LoginAsync(string email, string password);
+    Task<AuthResponse> LoginAsync(string identifier, string password);
     Task<AuthResponse> RegisterAsync(string username, string email, string password);
 
     // Plans
