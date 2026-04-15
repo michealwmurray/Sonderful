@@ -52,7 +52,7 @@ public class AuthIntegrationTests : IntegrationTestBase
         await RegisterAsync(email: email, password: password);
 
         var response = await Client.PostAsJsonAsync("api/auth/login",
-            new { email, password });
+            new { identifier = email, password });
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         var body = (await response.Content.ReadFromJsonAsync<AuthResponse>(JsonOpts))!;
@@ -66,7 +66,7 @@ public class AuthIntegrationTests : IntegrationTestBase
         await RegisterAsync(email: email, password: "CorrectPassword!");
 
         var response = await Client.PostAsJsonAsync("api/auth/login",
-            new { email, password = "WrongPassword!" });
+            new { identifier = email, password = "WrongPassword!" });
 
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
