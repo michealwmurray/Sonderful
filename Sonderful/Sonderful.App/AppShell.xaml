@@ -19,6 +19,16 @@
                 Route="DiscoverPage"
                 ContentTemplate="{DataTemplate views:DiscoverPage}" />
         </Tab>
+        <Tab Title="New Plan">
+            <ShellContent
+                Route="CreatePlanPage"
+                ContentTemplate="{DataTemplate views:CreatePlanPage}" />
+        </Tab>
+        <Tab Title="Profile">
+            <ShellContent
+                Route="ProfilePage"
+                ContentTemplate="{DataTemplate views:ProfilePage}" />
+        </Tab>
     </TabBar>
 
 </Shell>

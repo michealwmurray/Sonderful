@@ -193,7 +193,7 @@
             Grid.RowSpan="2"
             IsVisible="{Binding IsRefineOpen}">
 
-            <!-- Dimmed backdrop — tap to dismiss -->
+            <!-- Dimmed backdrop, tap to dismiss -->
             <Grid BackgroundColor="#99000000">
                 <Grid.GestureRecognizers>
                     <TapGestureRecognizer Command="{Binding CloseRefineCommand}" />
@@ -269,7 +269,7 @@
                     <!-- Distance -->
                     <VerticalStackLayout Spacing="8">
                         <Label
-                            Text="Distance (km) — used when no county selected"
+                            Text="Distance (km) - used when no county selected"
                             FontFamily="JakartaSemiBold"
                             FontSize="13"
                             TextColor="{StaticResource InkSecondary}" />
