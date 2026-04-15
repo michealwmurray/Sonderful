@@ -107,7 +107,7 @@ public class AuthServiceTests
         _userRepoMock.Setup(r => r.GetByEmailAsync("siobhan@example.com"))
                      .ReturnsAsync(new User { Id = 7, Username = "siobhan", Email = "siobhan@example.com", PasswordHash = hash });
 
-        var request = new LoginRequest { Email = "siobhan@example.com", Password = "correctPass" };
+        var request = new LoginRequest { Identifier = "siobhan@example.com", Password = "correctPass" };
 
         // Act
         var response = await _sut.LoginAsync(request);
@@ -126,7 +126,7 @@ public class AuthServiceTests
         _userRepoMock.Setup(r => r.GetByEmailAsync("ciaran@example.com"))
                      .ReturnsAsync(new User { Id = 9, Username = "ciaran", Email = "ciaran@example.com", PasswordHash = hash });
 
-        var request = new LoginRequest { Email = "ciaran@example.com", Password = "wrongPassword" };
+        var request = new LoginRequest { Identifier = "ciaran@example.com", Password = "wrongPassword" };
 
         // Act & Assert
         await Assert.ThrowsAsync<UnauthorizedAccessException>(() => _sut.LoginAsync(request));
@@ -138,8 +138,10 @@ public class AuthServiceTests
         // Arrange
         _userRepoMock.Setup(r => r.GetByEmailAsync(It.IsAny<string>()))
                      .ReturnsAsync((User?)null);
+        _userRepoMock.Setup(r => r.GetByUsernameAsync(It.IsAny<string>()))
+                     .ReturnsAsync((User?)null);
 
-        var request = new LoginRequest { Email = "nobody@example.com", Password = "anything" };
+        var request = new LoginRequest { Identifier = "nobody@example.com", Password = "anything" };
 
         // Act & Assert
         await Assert.ThrowsAsync<UnauthorizedAccessException>(() => _sut.LoginAsync(request));
