@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Sonderful.App.Views.CreatePlanPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:Sonderful.App.ViewModels"
+    x:DataType="vm:CreatePlanViewModel"
+    Title=""
+    Shell.NavBarIsVisible="False"
+    BackgroundColor="{StaticResource PageBg}">
+
+    <Grid RowDefinitions="Auto,*">
+
+        <!-- Header -->
+        <Border
+            Grid.Row="0"
+            BackgroundColor="{StaticResource Brand}"
+            Stroke="Transparent"
+            StrokeThickness="0">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="0,0,32,32" />
+            </Border.StrokeShape>
+            <VerticalStackLayout Padding="24,52,24,28" Spacing="4">
+                <Label
+                    Text="New Plan"
+                    FontFamily="JakartaExtraBold"
+                    FontSize="30"
+                    TextColor="White" />
+                <Label
+                    Text="Share something worth showing up for"
+                    FontFamily="JakartaRegular"
+                    FontSize="14"
+                    TextColor="#CCFFFFFF" />
+            </VerticalStackLayout>
+        </Border>
+
+        <!-- Form -->
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Padding="20,20,20,40" Spacing="20">
+
+                <!-- Details card -->
+                <Border Style="{StaticResource CardBorder}">
+                    <VerticalStackLayout Spacing="16">
+
+                        <Label
+                            Text="Details"
+                            FontFamily="JakartaBold"
+                            FontSize="16"
+                            TextColor="{StaticResource Ink}" />
+
+                        <VerticalStackLayout Spacing="6">
+                            <Label
+                                Text="Title"
+                                FontFamily="JakartaSemiBold"
+                                FontSize="13"
+                                TextColor="{StaticResource InkSecondary}" />
+                            <Border Style="{StaticResource InputFieldBorder}">
+                                <Entry
+                                    Placeholder="What's the plan?"
+                                    Text="{Binding Title}"
+                                    HeightRequest="52"
+                                    BackgroundColor="Transparent" />
+                            </Border>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout Spacing="6">
+                            <Label
+                                Text="Description"
+                                FontFamily="JakartaSemiBold"
+                                FontSize="13"
+                                TextColor="{StaticResource InkSecondary}" />
+                            <Border
+                                BackgroundColor="{StaticResource InputBg}"
+                                Stroke="{StaticResource InputBorder}"
+                                StrokeThickness="1.5">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="14" />
+                                </Border.StrokeShape>
+                                <Editor
+                                    Placeholder="Tell people what to expect (optional)"
+                                    Text="{Binding Description}"
+                                    HeightRequest="110"
+                                    BackgroundColor="Transparent"
+                                    Margin="4,4,4,4" />
+                            </Border>
+                        </VerticalStackLayout>
+
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                            <VerticalStackLayout Grid.Column="0" Spacing="6">
+                                <Label
+                                    Text="Category"
+                                    FontFamily="JakartaSemiBold"
+                                    FontSize="13"
+                                    TextColor="{StaticResource InkSecondary}" />
+                                <Border Style="{StaticResource InputFieldBorder}">
+                                    <Picker
+                                        Title="Pick one"
+                                        ItemsSource="{Binding Categories}"
+                                        SelectedItem="{Binding SelectedCategory}"
+                                        HeightRequest="52"
+                                        BackgroundColor="Transparent" />
+                                </Border>
+                            </VerticalStackLayout>
+                            <VerticalStackLayout Grid.Column="1" Spacing="6">
+                                <Label
+                                    Text="County"
+                                    FontFamily="JakartaSemiBold"
+                                    FontSize="13"
+                                    TextColor="{StaticResource InkSecondary}" />
+                                <Border Style="{StaticResource InputFieldBorder}">
+                                    <Picker
+                                        Title="Optional"
+                                        ItemsSource="{Binding Counties}"
+                                        SelectedItem="{Binding SelectedCounty}"
+                                        HeightRequest="52"
+                                        BackgroundColor="Transparent" />
+                                </Border>
+                            </VerticalStackLayout>
+                        </Grid>
+
+                        <VerticalStackLayout Spacing="6">
+                            <Label
+                                Text="Capacity"
+                                FontFamily="JakartaSemiBold"
+                                FontSize="13"
+                                TextColor="{StaticResource InkSecondary}" />
+                            <Border Style="{StaticResource InputFieldBorder}">
+                                <Entry
+                                    Placeholder="Max attendees"
+                                    Text="{Binding Capacity}"
+                                    Keyboard="Numeric"
+                                    HeightRequest="52"
+                                    BackgroundColor="Transparent" />
+                            </Border>
+                        </VerticalStackLayout>
+
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- When card -->
+                <Border Style="{StaticResource CardBorder}">
+                    <VerticalStackLayout Spacing="16">
+
+                        <Label
+                            Text="When"
+                            FontFamily="JakartaBold"
+                            FontSize="16"
+                            TextColor="{StaticResource Ink}" />
+
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                            <VerticalStackLayout Grid.Column="0" Spacing="6">
+                                <Label
+                                    Text="Date"
+                                    FontFamily="JakartaSemiBold"
+                                    FontSize="13"
+                                    TextColor="{StaticResource InkSecondary}" />
+                                <Border Style="{StaticResource InputFieldBorder}">
+                                    <DatePicker
+                                        Date="{Binding ScheduledDate}"
+                                        HeightRequest="52"
+                                        BackgroundColor="Transparent" />
+                                </Border>
+                            </VerticalStackLayout>
+                            <VerticalStackLayout Grid.Column="1" Spacing="6">
+                                <Label
+                                    Text="Time"
+                                    FontFamily="JakartaSemiBold"
+                                    FontSize="13"
+                                    TextColor="{StaticResource InkSecondary}" />
+                                <Border Style="{StaticResource InputFieldBorder}">
+                                    <TimePicker
+                                        Time="{Binding ScheduledTime}"
+                                        HeightRequest="52"
+                                        BackgroundColor="Transparent" />
+                                </Border>
+                            </VerticalStackLayout>
+                        </Grid>
+
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Where card -->
+                <Border Style="{StaticResource CardBorder}">
+                    <VerticalStackLayout Spacing="14">
+
+                        <Label
+                            Text="Where"
+                            FontFamily="JakartaBold"
+                            FontSize="16"
+                            TextColor="{StaticResource Ink}" />
+
+                        <Button
+                            Text="Use My Location"
+                            Command="{Binding UseCurrentLocationCommand}"
+                            Style="{StaticResource OutlineButton}"
+                            HorizontalOptions="Start" />
+
+                        <Label
+                            Text="{Binding LocationLabel}"
+                            FontFamily="JakartaRegular"
+                            FontSize="14"
+                            TextColor="{StaticResource InkSecondary}" />
+
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Create button -->
+                <Button
+                    Text="Create Plan"
+                    Command="{Binding CreatePlanCommand}"
+                    Margin="0,4,0,0" />
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+    </Grid>
+
+</ContentPage>

@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Sonderful.App.Views.RatePage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:Sonderful.App.ViewModels"
+    x:DataType="vm:RateViewModel"
+    Title=""
+    Shell.NavBarIsVisible="False"
+    BackgroundColor="{StaticResource PageBg}">
+
+    <Grid RowDefinitions="Auto,*,Auto">
+
+        <!-- ── Header ── -->
+        <Border
+            Grid.Row="0"
+            BackgroundColor="{StaticResource BrandDark}"
+            Stroke="Transparent"
+            StrokeThickness="0">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="0,0,32,32" />
+            </Border.StrokeShape>
+            <VerticalStackLayout Padding="24,52,24,28" Spacing="4">
+                <Label
+                    Text="Rate Attendees"
+                    FontFamily="JakartaExtraBold"
+                    FontSize="30"
+                    TextColor="White" />
+                <Label
+                    Text="Give each attendee a score from 1 to 5"
+                    FontFamily="JakartaRegular"
+                    FontSize="14"
+                    TextColor="#CCFFFFFF" />
+            </VerticalStackLayout>
+        </Border>
+
+        <!-- ── Attendee list ── -->
+        <CollectionView
+            Grid.Row="1"
+            ItemsSource="{Binding Attendees}"
+            Margin="0,16,0,0">
+
+            <CollectionView.EmptyView>
+                <VerticalStackLayout
+                    VerticalOptions="Center"
+                    HorizontalOptions="Center"
+                    Spacing="8"
+                    Margin="0,40,0,0">
+                    <Label
+                        Text="No attendees to rate"
+                        FontFamily="JakartaBold"
+                        FontSize="18"
+                        TextColor="{StaticResource InkMuted}"
+                        HorizontalOptions="Center" />
+                    <Label
+                        Text="Either no one else RSVPed, or you already rated them all."
+                        FontFamily="JakartaRegular"
+                        FontSize="14"
+                        TextColor="{StaticResource InkMuted}"
+                        HorizontalOptions="Center"
+                        HorizontalTextAlignment="Center"
+                        MaximumWidthRequest="280" />
+                </VerticalStackLayout>
+            </CollectionView.EmptyView>
+
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout Orientation="Vertical" ItemSpacing="12" />
+            </CollectionView.ItemsLayout>
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="vm:AttendeeRating">
+                    <Border
+                        Margin="20,0"
+                        BackgroundColor="{StaticResource Surface}"
+                        Stroke="Transparent"
+                        StrokeThickness="0">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="16" />
+                        </Border.StrokeShape>
+                        <Border.Shadow>
+                            <Shadow Brush="Black" Opacity="0.06" Offset="0,3" Radius="12" />
+                        </Border.Shadow>
+
+                        <Grid
+                            ColumnDefinitions="Auto,*,Auto"
+                            ColumnSpacing="14"
+                            Padding="16,14">
+
+                            <!-- Avatar initials circle -->
+                            <Border
+                                Grid.Column="0"
+                                HeightRequest="44"
+                                WidthRequest="44"
+                                BackgroundColor="{StaticResource BrandLight}"
+                                Stroke="Transparent"
+                                StrokeThickness="0">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="22" />
+                                </Border.StrokeShape>
+                                <Label
+                                    Text="{Binding User.Username, StringFormat='{0:0}'}"
+                                    FontFamily="JakartaExtraBold"
+                                    FontSize="18"
+                                    TextColor="{StaticResource Brand}"
+                                    HorizontalOptions="Center"
+                                    VerticalOptions="Center" />
+                            </Border>
+
+                            <!-- Username -->
+                            <Label
+                                Grid.Column="1"
+                                Text="{Binding User.Username}"
+                                FontFamily="JakartaSemiBold"
+                                FontSize="15"
+                                TextColor="{StaticResource Ink}"
+                                VerticalOptions="Center" />
+
+                            <!-- Score picker -->
+                            <Border
+                                Grid.Column="2"
+                                Style="{StaticResource InputFieldBorder}"
+                                WidthRequest="100">
+                                <Picker
+                                    Title="Score"
+                                    ItemsSource="{Binding Scores}"
+                                    SelectedItem="{Binding SelectedScore}"
+                                    HeightRequest="46"
+                                    BackgroundColor="Transparent" />
+                            </Border>
+
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <!-- Loading indicator -->
+        <ActivityIndicator
+            Grid.Row="1"
+            IsRunning="{Binding IsBusy}"
+            IsVisible="{Binding IsBusy}"
+            VerticalOptions="Center"
+            HorizontalOptions="Center" />
+
+        <!-- ── Submit button ── -->
+        <Button
+            Grid.Row="2"
+            Text="Submit Ratings"
+            Command="{Binding SubmitRatingsCommand}"
+            Margin="20,12,20,32" />
+
+    </Grid>
+
+</ContentPage>
