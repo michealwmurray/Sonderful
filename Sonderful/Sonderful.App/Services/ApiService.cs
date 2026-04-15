@@ -27,9 +27,9 @@ public class ApiService : IApiService
         _http.BaseAddress = new Uri(BaseUrl);
     }
 
-    public async Task<AuthResponse> LoginAsync(string email, string password)
+    public async Task<AuthResponse> LoginAsync(string identifier, string password)
     {
-        var response = await _http.PostAsJsonAsync("api/auth/login", new { email, password });
+        var response = await _http.PostAsJsonAsync("api/auth/login", new { identifier, password });
         await EnsureSuccessAsync(response);
         return (await response.Content.ReadFromJsonAsync<AuthResponse>(_jsonOpts))!;
     }

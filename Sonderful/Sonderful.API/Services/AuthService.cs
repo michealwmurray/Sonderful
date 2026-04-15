@@ -39,11 +39,12 @@ public class AuthService : IAuthService
 
     public async Task<AuthResponse> LoginAsync(LoginRequest request)
     {
-        var user = await _users.GetByEmailAsync(request.Email)
-                   ?? throw new UnauthorizedAccessException("Invalid email or password.");
+        var user = await _users.GetByEmailAsync(request.Identifier)
+                   ?? await _users.GetByUsernameAsync(request.Identifier)
+                   ?? throw new UnauthorizedAccessException("Invalid email/username or password.");
 
         if (!BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
-            throw new UnauthorizedAccessException("Invalid email or password.");
+            throw new UnauthorizedAccessException("Invalid email/username or password.");
 
         return BuildResponse(user);
     }
