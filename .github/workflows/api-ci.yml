@@ -1,0 +1,36 @@
+name: API CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+defaults:
+  run:
+    working-directory: Sonderful
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Restore
+        run: dotnet restore Sonderful.Tests/Sonderful.Tests.csproj
+
+      - name: Build API
+        run: dotnet build Sonderful.API/Sonderful.API.csproj --configuration Release --no-restore
+
+      - name: Build tests
+        run: dotnet build Sonderful.Tests/Sonderful.Tests.csproj --configuration Release --no-restore
+
+      - name: Test
+        run: dotnet test Sonderful.Tests/Sonderful.Tests.csproj --configuration Release --no-build --no-restore
