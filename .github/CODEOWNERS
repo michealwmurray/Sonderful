@@ -1,0 +1,16 @@
+# CODEOWNERS for Sonderful.
+# In practice, this is a solo project for the DevOps Pipelines module, so every path just points
+# to @michealwmurray for now. In the team design from CA1, ownership would
+# be split across GitHub Teams based on the RACIVS matrix (CA1 Section 3.2):
+#   .github/           -> devops + devsecops
+#   Sonderful.API/     -> backend
+#   Sonderful.App/     -> mobile
+#   Sonderful.Tests/   -> qa
+#   Dockerfile         -> devsecops
+
+*                                                @michealwmurray
+/.github/                                        @michealwmurray
+/Sonderful/Sonderful/Sonderful.API/              @michealwmurray
+/Sonderful/Sonderful/Sonderful.App/              @michealwmurray
+/Sonderful/Sonderful/Sonderful.Tests/            @michealwmurray
+/Sonderful/Sonderful/Sonderful.API/Dockerfile    @michealwmurray
