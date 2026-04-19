@@ -23,6 +23,14 @@ jobs:
         with:
           dotnet-version: '10.0.x'
 
+      - name: Cache NuGet packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
       - name: Restore
         run: dotnet restore Sonderful.Tests/Sonderful.Tests.csproj
 
@@ -32,5 +40,14 @@ jobs:
       - name: Build tests
         run: dotnet build Sonderful.Tests/Sonderful.Tests.csproj --configuration Release --no-restore
 
-      - name: Test
-        run: dotnet test Sonderful.Tests/Sonderful.Tests.csproj --configuration Release --no-build --no-restore
+      - name: Test with coverage
+        run: >
+          dotnet test Sonderful.Tests/Sonderful.Tests.csproj
+          --configuration Release
+          --no-build
+          --no-restore
+          /p:CollectCoverage=true
+          /p:Threshold=55
+          /p:ThresholdType=line
+          /p:ThresholdStat=total
+          /p:ExcludeByFile="**/Migrations/*.cs"
