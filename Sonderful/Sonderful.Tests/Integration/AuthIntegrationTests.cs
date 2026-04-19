@@ -11,7 +11,7 @@ public class AuthIntegrationTests : IntegrationTestBase
     [Fact]
     public async Task Register_ValidRequest_Returns201WithTokenAndUserId()
     {
-        var response = await Client.PostAsJsonAsync("api/auth/register", new
+        var response = await _client.PostAsJsonAsync("api/auth/register", new
         {
             username = "saoirse",
             email = $"new_{Guid.NewGuid():N}@test.com",
@@ -19,7 +19,7 @@ public class AuthIntegrationTests : IntegrationTestBase
         });
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var body = (await response.Content.ReadFromJsonAsync<AuthResponse>(JsonOpts))!;
+        var body = (await response.Content.ReadFromJsonAsync<AuthResponse>(_jsonOpts))!;
         Assert.NotEmpty(body.Token);
         Assert.True(body.UserId > 0);
         Assert.Equal("saoirse", body.Username);
@@ -34,7 +34,7 @@ public class AuthIntegrationTests : IntegrationTestBase
         await RegisterAsync(email: email);
 
         // Second with the same email should fail
-        var response = await Client.PostAsJsonAsync("api/auth/register", new
+        var response = await _client.PostAsJsonAsync("api/auth/register", new
         {
             username = "padraig",
             email,
@@ -51,11 +51,11 @@ public class AuthIntegrationTests : IntegrationTestBase
         const string password = "Password123!";
         await RegisterAsync(email: email, password: password);
 
-        var response = await Client.PostAsJsonAsync("api/auth/login",
+        var response = await _client.PostAsJsonAsync("api/auth/login",
             new { identifier = email, password });
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var body = (await response.Content.ReadFromJsonAsync<AuthResponse>(JsonOpts))!;
+        var body = (await response.Content.ReadFromJsonAsync<AuthResponse>(_jsonOpts))!;
         Assert.NotEmpty(body.Token);
     }
 
@@ -65,7 +65,7 @@ public class AuthIntegrationTests : IntegrationTestBase
         var email = $"wp_{Guid.NewGuid():N}@test.com";
         await RegisterAsync(email: email, password: "CorrectPassword!");
 
-        var response = await Client.PostAsJsonAsync("api/auth/login",
+        var response = await _client.PostAsJsonAsync("api/auth/login",
             new { identifier = email, password = "WrongPassword!" });
 
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
@@ -74,7 +74,7 @@ public class AuthIntegrationTests : IntegrationTestBase
     [Fact]
     public async Task Login_UnknownEmail_Returns401()
     {
-        var response = await Client.PostAsJsonAsync("api/auth/login",
+        var response = await _client.PostAsJsonAsync("api/auth/login",
             new { email = "nobody@nowhere.com", password = "anything" });
 
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
@@ -84,7 +84,7 @@ public class AuthIntegrationTests : IntegrationTestBase
     public async Task ProtectedEndpoint_WithoutToken_Returns401()
     {
         ClearAuth();
-        var response = await Client.GetAsync("api/plans/mine");
+        var response = await _client.GetAsync("api/plans/mine");
 
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
