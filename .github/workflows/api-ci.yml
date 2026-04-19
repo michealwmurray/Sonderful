@@ -40,6 +40,19 @@ jobs:
       - name: Build tests
         run: dotnet build Sonderful.Tests/Sonderful.Tests.csproj --configuration Release --no-restore
 
+      - name: Lint
+        run: >
+          dotnet format Sonderful.API/Sonderful.API.csproj
+          --verify-no-changes
+          --severity warn
+          --exclude "**/Migrations/**"
+
+      - name: Lint tests
+        run: >
+          dotnet format Sonderful.Tests/Sonderful.Tests.csproj
+          --verify-no-changes
+          --severity warn
+
       - name: Test with coverage
         run: >
           dotnet test Sonderful.Tests/Sonderful.Tests.csproj

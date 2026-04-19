@@ -26,10 +26,10 @@ public class PlansIntegrationTests : IntegrationTestBase
         var auth = await RegisterAsync();
         Authenticate(auth.Token);
 
-        var response = await Client.PostAsJsonAsync("api/plans", NewPlanPayload("Morning Coffee"));
+        var response = await _client.PostAsJsonAsync("api/plans", NewPlanPayload("Morning Coffee"));
 
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
-        var plan = (await response.Content.ReadFromJsonAsync<PlanResponse>(JsonOpts))!;
+        var plan = (await response.Content.ReadFromJsonAsync<PlanResponse>(_jsonOpts))!;
         Assert.Equal("Morning Coffee", plan.Title);
         Assert.True(plan.Id > 0);
     }
@@ -38,7 +38,7 @@ public class PlansIntegrationTests : IntegrationTestBase
     public async Task CreatePlan_Unauthenticated_Returns401()
     {
         ClearAuth();
-        var response = await Client.PostAsJsonAsync("api/plans", NewPlanPayload());
+        var response = await _client.PostAsJsonAsync("api/plans", NewPlanPayload());
 
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
@@ -49,13 +49,13 @@ public class PlansIntegrationTests : IntegrationTestBase
         var auth = await RegisterAsync();
         Authenticate(auth.Token);
 
-        var created = (await (await Client.PostAsJsonAsync("api/plans", NewPlanPayload()))
-            .Content.ReadFromJsonAsync<PlanResponse>(JsonOpts))!;
+        var created = (await (await _client.PostAsJsonAsync("api/plans", NewPlanPayload()))
+            .Content.ReadFromJsonAsync<PlanResponse>(_jsonOpts))!;
 
-        var response = await Client.GetAsync($"api/plans/{created.Id}");
+        var response = await _client.GetAsync($"api/plans/{created.Id}");
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var plan = (await response.Content.ReadFromJsonAsync<PlanResponse>(JsonOpts))!;
+        var plan = (await response.Content.ReadFromJsonAsync<PlanResponse>(_jsonOpts))!;
         Assert.Equal(created.Id, plan.Id);
         Assert.Equal(created.Title, plan.Title);
     }
@@ -66,7 +66,7 @@ public class PlansIntegrationTests : IntegrationTestBase
         var auth = await RegisterAsync();
         Authenticate(auth.Token);
 
-        var response = await Client.GetAsync("api/plans/999999");
+        var response = await _client.GetAsync("api/plans/999999");
 
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
@@ -77,10 +77,10 @@ public class PlansIntegrationTests : IntegrationTestBase
         var auth = await RegisterAsync();
         Authenticate(auth.Token);
 
-        var created = (await (await Client.PostAsJsonAsync("api/plans", NewPlanPayload()))
-            .Content.ReadFromJsonAsync<PlanResponse>(JsonOpts))!;
+        var created = (await (await _client.PostAsJsonAsync("api/plans", NewPlanPayload()))
+            .Content.ReadFromJsonAsync<PlanResponse>(_jsonOpts))!;
 
-        var response = await Client.DeleteAsync($"api/plans/{created.Id}");
+        var response = await _client.DeleteAsync($"api/plans/{created.Id}");
 
         Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
     }
@@ -91,14 +91,14 @@ public class PlansIntegrationTests : IntegrationTestBase
         // Owner creates the plan
         var owner = await RegisterAsync();
         Authenticate(owner.Token);
-        var created = (await (await Client.PostAsJsonAsync("api/plans", NewPlanPayload()))
-            .Content.ReadFromJsonAsync<PlanResponse>(JsonOpts))!;
+        var created = (await (await _client.PostAsJsonAsync("api/plans", NewPlanPayload()))
+            .Content.ReadFromJsonAsync<PlanResponse>(_jsonOpts))!;
 
         // Different user attempts to delete
         var other = await RegisterAsync();
         Authenticate(other.Token);
 
-        var response = await Client.DeleteAsync($"api/plans/{created.Id}");
+        var response = await _client.DeleteAsync($"api/plans/{created.Id}");
 
         Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
     }
@@ -108,14 +108,14 @@ public class PlansIntegrationTests : IntegrationTestBase
     {
         var owner = await RegisterAsync();
         Authenticate(owner.Token);
-        var created = (await (await Client.PostAsJsonAsync("api/plans", NewPlanPayload()))
-            .Content.ReadFromJsonAsync<PlanResponse>(JsonOpts))!;
+        var created = (await (await _client.PostAsJsonAsync("api/plans", NewPlanPayload()))
+            .Content.ReadFromJsonAsync<PlanResponse>(_jsonOpts))!;
 
         // Different user RSVPs
         var attendee = await RegisterAsync();
         Authenticate(attendee.Token);
 
-        var response = await Client.PostAsync($"api/plans/{created.Id}/rsvp", null);
+        var response = await _client.PostAsync($"api/plans/{created.Id}/rsvp", null);
 
         Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
     }
@@ -125,17 +125,17 @@ public class PlansIntegrationTests : IntegrationTestBase
     {
         var owner = await RegisterAsync();
         Authenticate(owner.Token);
-        var created = (await (await Client.PostAsJsonAsync("api/plans", NewPlanPayload()))
-            .Content.ReadFromJsonAsync<PlanResponse>(JsonOpts))!;
+        var created = (await (await _client.PostAsJsonAsync("api/plans", NewPlanPayload()))
+            .Content.ReadFromJsonAsync<PlanResponse>(_jsonOpts))!;
 
         var attendee = await RegisterAsync();
         Authenticate(attendee.Token);
 
         // First RSVP succeeds
-        await Client.PostAsync($"api/plans/{created.Id}/rsvp", null);
+        await _client.PostAsync($"api/plans/{created.Id}/rsvp", null);
 
         // Second RSVP should fail
-        var response = await Client.PostAsync($"api/plans/{created.Id}/rsvp", null);
+        var response = await _client.PostAsync($"api/plans/{created.Id}/rsvp", null);
 
         Assert.Equal(HttpStatusCode.Conflict, response.StatusCode);
     }
@@ -147,13 +147,13 @@ public class PlansIntegrationTests : IntegrationTestBase
         Authenticate(auth.Token);
 
         // Create two plans as this user
-        await Client.PostAsJsonAsync("api/plans", NewPlanPayload("My Plan A"));
-        await Client.PostAsJsonAsync("api/plans", NewPlanPayload("My Plan B"));
+        await _client.PostAsJsonAsync("api/plans", NewPlanPayload("My Plan A"));
+        await _client.PostAsJsonAsync("api/plans", NewPlanPayload("My Plan B"));
 
-        var response = await Client.GetAsync("api/plans/mine");
+        var response = await _client.GetAsync("api/plans/mine");
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var plans = (await response.Content.ReadFromJsonAsync<List<PlanResponse>>(JsonOpts))!;
+        var plans = (await response.Content.ReadFromJsonAsync<List<PlanResponse>>(_jsonOpts))!;
         Assert.True(plans.Count >= 2);
         Assert.All(plans, p => Assert.Equal(auth.UserId, p.CreatorId));
     }
