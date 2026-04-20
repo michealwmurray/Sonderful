@@ -1,9 +1,9 @@
 # Build
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
-COPY Sonderful/Sonderful/Sonderful.API/Sonderful.API.csproj Sonderful.API/
+COPY Sonderful/Sonderful.API/Sonderful.API.csproj Sonderful.API/
 RUN dotnet restore Sonderful.API/Sonderful.API.csproj
-COPY Sonderful/Sonderful/Sonderful.API/ Sonderful.API/
+COPY Sonderful/Sonderful.API/ Sonderful.API/
 RUN dotnet publish Sonderful.API/Sonderful.API.csproj -c Release -o /app/publish
 
 # Runtime
