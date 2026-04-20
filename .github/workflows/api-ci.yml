@@ -53,6 +53,15 @@ jobs:
           --verify-no-changes
           --severity warn
 
+      - name: Check for vulnerable dependencies
+        run: |
+          output=$(dotnet list Sonderful.API/Sonderful.API.csproj package --include-transitive --vulnerable)
+          echo "$output"
+          if echo "$output" | grep -qE "(Critical|High)"; then
+            echo "Vulnerable dependencies found."
+            exit 1
+          fi
+
       - name: Test with coverage
         run: >
           dotnet test Sonderful.Tests/Sonderful.Tests.csproj
