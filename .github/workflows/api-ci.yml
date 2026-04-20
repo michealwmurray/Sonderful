@@ -95,7 +95,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
-          context: .
+          context: Sonderful/Sonderful
           file: Sonderful/Sonderful/Sonderful.API/Dockerfile
           push: ${{ github.event_name != 'pull_request' }}
           tags: ghcr.io/${{ github.repository_owner }}/sonderful-api:${{ github.sha }}
