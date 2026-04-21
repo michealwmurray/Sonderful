@@ -30,7 +30,7 @@ jobs:
 
     steps:
       - name: Deploy to Dev
-        uses: azure/webapps-deploy@v3
+        uses: azure/webapps-deploy@02a81bead70021f5284939794bcec79c271ab383 # v3
         with:
           app-name: ${{ env.WEBAPP }}
           slot-name: dev
@@ -49,7 +49,7 @@ jobs:
 
     steps:
       - name: Deploy to Test
-        uses: azure/webapps-deploy@v3
+        uses: azure/webapps-deploy@02a81bead70021f5284939794bcec79c271ab383 # v3
         with:
           app-name: ${{ env.WEBAPP }}
           slot-name: test
@@ -68,7 +68,7 @@ jobs:
 
     steps:
       - name: Deploy to Staging
-        uses: azure/webapps-deploy@v3
+        uses: azure/webapps-deploy@02a81bead70021f5284939794bcec79c271ab383 # v3
         with:
           app-name: ${{ env.WEBAPP }}
           slot-name: staging
@@ -87,7 +87,7 @@ jobs:
 
     steps:
       - name: Deploy to Production
-        uses: azure/webapps-deploy@v3
+        uses: azure/webapps-deploy@02a81bead70021f5284939794bcec79c271ab383 # v3
         with:
           app-name: ${{ env.WEBAPP }}
           slot-name: production
