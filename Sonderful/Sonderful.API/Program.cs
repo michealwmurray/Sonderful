@@ -1,3 +1,4 @@
+using Azure.Identity;
 using System.Text;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -6,7 +7,6 @@ using Microsoft.IdentityModel.Tokens;
 using Sonderful.API.Data;
 using Sonderful.API.Repositories;
 using Sonderful.API.Services;
-using Azure.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
