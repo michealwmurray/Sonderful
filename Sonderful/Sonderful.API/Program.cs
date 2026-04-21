@@ -1,6 +1,6 @@
-using Azure.Identity;
 using System.Text;
 using System.Text.Json.Serialization;
+using Azure.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
