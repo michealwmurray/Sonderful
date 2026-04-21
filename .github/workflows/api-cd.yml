@@ -1,0 +1,100 @@
+name: API CD
+on:
+  workflow_run:
+    workflows: ["API CI"]
+    types:
+      - completed
+    branches:
+      - main
+ 
+permissions:
+  contents: read
+  actions: read
+
+env:
+  IMAGE: ghcr.io/michealwmurray/sonderful-api
+  WEBAPP: sonderful-api
+
+jobs:
+  check-ci:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - name: CI passed
+        run: echo "CI passed, starting deployment"
+
+  deploy-dev:
+    runs-on: ubuntu-latest
+    needs: check-ci
+    environment: dev
+
+    steps:
+      - name: Deploy to Dev
+        uses: azure/webapps-deploy@02a81bead70021f5284939794bcec79c271ab383 # v3
+        with:
+          app-name: ${{ env.WEBAPP }}
+          slot-name: dev
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_DEV }}
+          images: ${{ env.IMAGE }}:${{ github.event.workflow_run.head_sha }}
+
+      - name: Smoke test Dev
+        run: |
+          sleep 30
+          curl --fail https://${{ env.WEBAPP }}-dev.germanywestcentral-01.azurewebsites.net/health
+
+  deploy-test:
+    runs-on: ubuntu-latest
+    needs: deploy-dev
+    environment: test
+
+    steps:
+      - name: Deploy to Test
+        uses: azure/webapps-deploy@02a81bead70021f5284939794bcec79c271ab383 # v3
+        with:
+          app-name: ${{ env.WEBAPP }}
+          slot-name: test
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_TEST }}
+          images: ${{ env.IMAGE }}:${{ github.event.workflow_run.head_sha }}
+
+      - name: Smoke test Test
+        run: |
+          sleep 30
+          curl --fail https://${{ env.WEBAPP }}-test.germanywestcentral-01.azurewebsites.net/health
+
+  deploy-staging:
+    runs-on: ubuntu-latest
+    needs: deploy-test
+    environment: staging
+
+    steps:
+      - name: Deploy to Staging
+        uses: azure/webapps-deploy@02a81bead70021f5284939794bcec79c271ab383 # v3
+        with:
+          app-name: ${{ env.WEBAPP }}
+          slot-name: staging
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_STAGING }}
+          images: ${{ env.IMAGE }}:${{ github.event.workflow_run.head_sha }}
+
+      - name: Smoke test Staging
+        run: |
+          sleep 30
+          curl --fail https://${{ env.WEBAPP }}-staging.germanywestcentral-01.azurewebsites.net/health
+
+  deploy-production:
+    runs-on: ubuntu-latest
+    needs: deploy-staging
+    environment: production
+
+    steps:
+      - name: Deploy to Production
+        uses: azure/webapps-deploy@02a81bead70021f5284939794bcec79c271ab383 # v3
+        with:
+          app-name: ${{ env.WEBAPP }}
+          slot-name: production
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_PROD }}
+          images: ${{ env.IMAGE }}:${{ github.event.workflow_run.head_sha }}
+
+      - name: Smoke test Production
+        run: |
+          sleep 30
+          curl --fail https://${{ env.WEBAPP }}.germanywestcentral-01.azurewebsites.net/health
