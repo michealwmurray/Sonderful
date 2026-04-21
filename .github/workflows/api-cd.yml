@@ -40,7 +40,7 @@ jobs:
       - name: Smoke test Dev
         run: |
           sleep 30
-          curl --fail https://${{ env.WEBAPP }}-dev.germanywestcentral-01.azurewebsites.net/health
+          curl --fail https://sonderful-api-dev-hdb8aec2h4cge3fg.germanywestcentral-01.azurewebsites.net/health
 
   deploy-test:
     runs-on: ubuntu-latest
@@ -59,7 +59,7 @@ jobs:
       - name: Smoke test Test
         run: |
           sleep 30
-          curl --fail https://${{ env.WEBAPP }}-test.germanywestcentral-01.azurewebsites.net/health
+          curl --fail https://sonderful-api-test-e5ddfsd7emckbgb2.germanywestcentral-01.azurewebsites.net/health
 
   deploy-staging:
     runs-on: ubuntu-latest
@@ -78,7 +78,7 @@ jobs:
       - name: Smoke test Staging
         run: |
           sleep 30
-          curl --fail https://${{ env.WEBAPP }}-staging.germanywestcentral-01.azurewebsites.net/health
+          curl --fail https://sonderful-api-staging-f9fshpgxhfhtdyak.germanywestcentral-01.azurewebsites.net/health
 
   deploy-production:
     runs-on: ubuntu-latest
@@ -97,4 +97,4 @@ jobs:
       - name: Smoke test Production
         run: |
           sleep 30
-          curl --fail https://${{ env.WEBAPP }}.germanywestcentral-01.azurewebsites.net/health
+          curl --fail https://sonderful-api-gwe9hchwhdbcg0h3.germanywestcentral-01.azurewebsites.net/health
