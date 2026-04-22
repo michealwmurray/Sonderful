@@ -98,3 +98,13 @@ jobs:
         run: |
           sleep 30
           curl --fail https://sonderful-api-gwe9hchwhdbcg0h3.germanywestcentral-01.azurewebsites.net/health
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          VERSION="v$(date +'%Y.%m.%d').${{ github.run_number }}"
+          gh release create "$VERSION" \
+            --title "$VERSION" \
+            --notes "Deployed to production. Commit: ${{ github.event.workflow_run.head_sha }}" \
+            --target "${{ github.event.workflow_run.head_sha }}"
