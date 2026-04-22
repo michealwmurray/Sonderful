@@ -6,14 +6,14 @@ Sonderful helps adults combat social isolation by making it easy to discover and
 Below are some screens from the Windows build.
 
 <p align="center">
-  <img src="docs/screenshots/login.png" width="23%" />
-  <img src="docs/screenshots/register.png" width="23%" />
-  <img src="docs/screenshots/discover.png" width="23%" />
-  <img src="docs/screenshots/plan-detail.png" width="23%" />
+  <img src="docs/screenshots/login.png" width="30%" />
+  <img src="docs/screenshots/register.png" width="30%" />
+  <img src="docs/screenshots/discover.png" width="30%" />
 </p>
 <p align="center">
-  <img src="docs/screenshots/new-plan.png" width="23%" />
-  <img src="docs/screenshots/profile.png" width="23%" />
+  <img src="docs/screenshots/plan-detail.png" width="30%" />
+  <img src="docs/screenshots/new-plan.png" width="30%" />
+  <img src="docs/screenshots/profile.png" width="30%" />
 </p>
 
 ## Tech Stack
@@ -42,9 +42,11 @@ Below are some screens from the Windows build.
 
 ## Project Structure
 
+```
 Sonderful.API/     - REST API (controllers, services, repositories, EF Core)
 Sonderful.App/     - MAUI frontend (views, view models, DTOs, services)
 Sonderful.Tests/   - Unit and integration tests
+```
 
 ## Tests
 
