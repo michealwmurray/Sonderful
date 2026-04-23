@@ -23,6 +23,7 @@ public static class MauiProgram
 
         // Remove default platform borders from inputs
         RemoveNativeInputBorders();
+        HideScrollBars();
 
         builder.Services.AddSingleton<SessionService>();
         builder.Services.AddSingleton<IApiService>(sp =>
@@ -50,6 +51,16 @@ public static class MauiProgram
 #endif
 
         return builder.Build();
+    }
+
+    private static void HideScrollBars()
+    {
+        Microsoft.Maui.Handlers.ScrollViewHandler.Mapper.AppendToMapping("NoScrollBar", (handler, _) =>
+        {
+#if WINDOWS
+            handler.PlatformView.VerticalScrollBarVisibility = Microsoft.UI.Xaml.Controls.ScrollBarVisibility.Hidden;
+#endif
+        });
     }
 
     private static void RemoveNativeInputBorders()
@@ -80,21 +91,36 @@ public static class MauiProgram
 #endif
         });
 
-        // Picker (ComboBox on Windows)
-        Microsoft.Maui.Handlers.PickerHandler.Mapper.AppendToMapping("Borderless", (handler, _) =>
+        Microsoft.Maui.Handlers.PickerHandler.Mapper.AppendToMapping("Borderless", (handler, view) =>
         {
 #if WINDOWS
             var transparent = new Microsoft.UI.Xaml.Media.SolidColorBrush(Microsoft.UI.Colors.Transparent);
             handler.PlatformView.BorderThickness = new Microsoft.UI.Xaml.Thickness(0);
             handler.PlatformView.BorderBrush = transparent;
             handler.PlatformView.Background = transparent;
+            handler.PlatformView.VerticalAlignment = Microsoft.UI.Xaml.VerticalAlignment.Center;
+            handler.PlatformView.VerticalContentAlignment = Microsoft.UI.Xaml.VerticalAlignment.Center;
+            handler.PlatformView.HorizontalContentAlignment = Microsoft.UI.Xaml.HorizontalAlignment.Left;
+            var title = ((Microsoft.Maui.Controls.Picker)view).Title ?? string.Empty;
+            handler.PlatformView.PlaceholderText = title;
+            handler.PlatformView.Header = null;
+            handler.PlatformView.HeaderTemplate = null;
+            handler.PlatformView.RegisterPropertyChangedCallback(
+                Microsoft.UI.Xaml.Controls.ComboBox.HeaderProperty,
+                (s, _) =>
+                {
+                    if (s is Microsoft.UI.Xaml.Controls.ComboBox cb && cb.Header != null)
+                    {
+                        cb.Header = null;
+                        cb.HeaderTemplate = null;
+                    }
+                });
             handler.PlatformView.Loaded += (s, e) =>
             {
                 if (s is Microsoft.UI.Xaml.Controls.ComboBox cb)
                 {
-                    cb.VerticalContentAlignment = Microsoft.UI.Xaml.VerticalAlignment.Center;
-                    cb.HorizontalContentAlignment = Microsoft.UI.Xaml.HorizontalAlignment.Left;
-                    CenterVisualTreeTextBlocks(cb);
+                    cb.Header = null;
+                    cb.HeaderTemplate = null;
                 }
             };
 #elif ANDROID
@@ -102,7 +128,6 @@ public static class MauiProgram
 #endif
         });
 
-        // DatePicker (CalendarDatePicker on Windows)
         Microsoft.Maui.Handlers.DatePickerHandler.Mapper.AppendToMapping("Borderless", (handler, _) =>
         {
 #if WINDOWS
@@ -113,32 +138,16 @@ public static class MauiProgram
 #endif
         });
 
-        // TimePicker (TimePicker on Windows)
         Microsoft.Maui.Handlers.TimePickerHandler.Mapper.AppendToMapping("Borderless", (handler, _) =>
         {
 #if WINDOWS
             var transparent = new Microsoft.UI.Xaml.Media.SolidColorBrush(Microsoft.UI.Colors.Transparent);
             handler.PlatformView.BorderThickness = new Microsoft.UI.Xaml.Thickness(0);
             handler.PlatformView.Background = transparent;
+            handler.PlatformView.MinHeight = 0;
             handler.PlatformView.VerticalAlignment = Microsoft.UI.Xaml.VerticalAlignment.Center;
+            handler.PlatformView.VerticalContentAlignment = Microsoft.UI.Xaml.VerticalAlignment.Center;
 #endif
         });
     }
-
-#if WINDOWS
-    // Walks the WinUI visual tree and vertically centers any TextBlock children.
-    // Used to fix ComboBox (Picker) placeholder text alignment when HeightRequest
-    // forces the control taller than its natural WinUI size.
-    private static void CenterVisualTreeTextBlocks(Microsoft.UI.Xaml.DependencyObject parent)
-    {
-        int count = Microsoft.UI.Xaml.Media.VisualTreeHelper.GetChildrenCount(parent);
-        for (int i = 0; i < count; i++)
-        {
-            var child = Microsoft.UI.Xaml.Media.VisualTreeHelper.GetChild(parent, i);
-            if (child is Microsoft.UI.Xaml.Controls.TextBlock tb)
-                tb.VerticalAlignment = Microsoft.UI.Xaml.VerticalAlignment.Center;
-            CenterVisualTreeTextBlocks(child);
-        }
-    }
-#endif
 }

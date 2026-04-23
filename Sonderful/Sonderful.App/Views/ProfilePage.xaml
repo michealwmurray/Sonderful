@@ -81,7 +81,7 @@
                 </Grid>
             </Grid>
 
-            <VerticalStackLayout Padding="24,20,24,40" Spacing="16">
+            <VerticalStackLayout Padding="24,20,24,40" Spacing="16" MaximumWidthRequest="600" HorizontalOptions="Center">
 
                 <!-- Name + bio -->
                 <VerticalStackLayout Spacing="4" HorizontalOptions="Center">

@@ -42,6 +42,7 @@ public partial class PlanDetailViewModel : ObservableObject, IQueryAttributable
     public bool IsCreatorAndPast => IsCreator && IsPast;
     public bool HasPhotos => Photos.Count > 0;
     public bool HasNoPhotos => Photos.Count == 0;
+    public bool HasNoComments => Comments.Count == 0;
 
     public void ApplyQueryAttributes(IDictionary<string, object> query)
     {
@@ -69,6 +70,7 @@ public partial class PlanDetailViewModel : ObservableObject, IQueryAttributable
 
             var list = await _api.GetCommentsAsync(planId);
             Comments = new ObservableCollection<CommentResponse>(list);
+            OnPropertyChanged(nameof(HasNoComments));
         }
         catch (Exception ex)
         {
@@ -186,6 +188,7 @@ public partial class PlanDetailViewModel : ObservableObject, IQueryAttributable
         {
             await _api.DeleteCommentAsync(Plan.Id, comment.Id);
             Comments.Remove(comment);
+            OnPropertyChanged(nameof(HasNoComments));
         }
         catch (Exception ex)
         {
@@ -204,6 +207,7 @@ public partial class PlanDetailViewModel : ObservableObject, IQueryAttributable
             var comment = await _api.AddCommentAsync(Plan.Id, NewComment);
             Comments.Add(comment);
             NewComment = string.Empty;
+            OnPropertyChanged(nameof(HasNoComments));
         }
         catch (Exception ex)
         {

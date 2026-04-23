@@ -48,7 +48,7 @@
 
         <!-- Form -->
         <ScrollView Grid.Row="1">
-            <VerticalStackLayout Padding="20,20,20,40" Spacing="20">
+            <VerticalStackLayout Padding="20,20,20,40" Spacing="20" HorizontalOptions="Center" MinimumWidthRequest="{OnPlatform WinUI=560, Android=0}" MaximumWidthRequest="720">
 
                 <!-- Details card -->
                 <Border Style="{StaticResource CardBorder}">
@@ -88,12 +88,11 @@
                         <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
                             <VerticalStackLayout Grid.Column="0" Spacing="6">
                                 <Label Text="Category" FontFamily="JakartaSemiBold" FontSize="13" TextColor="{StaticResource InkSecondary}" />
-                                <Border Style="{StaticResource InputFieldBorder}">
+                                <Border Style="{StaticResource InputFieldBorder}" Padding="14,10" HeightRequest="52">
                                     <Picker
                                         Title="Pick one"
                                         ItemsSource="{Binding Categories}"
                                         SelectedItem="{Binding SelectedCategory}"
-                                        HeightRequest="52"
                                         BackgroundColor="Transparent" />
                                 </Border>
                             </VerticalStackLayout>
@@ -119,20 +118,19 @@
 
                         <Label Text="When" FontFamily="JakartaBold" FontSize="16" TextColor="{StaticResource Ink}" />
 
-                        <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
-                            <VerticalStackLayout Grid.Column="0" Spacing="6">
-                                <Label Text="Date" FontFamily="JakartaSemiBold" FontSize="13" TextColor="{StaticResource InkSecondary}" />
-                                <Border Style="{StaticResource InputFieldBorder}">
-                                    <DatePicker Date="{Binding ScheduledDate}" HeightRequest="52" BackgroundColor="Transparent" />
-                                </Border>
-                            </VerticalStackLayout>
-                            <VerticalStackLayout Grid.Column="1" Spacing="6">
-                                <Label Text="Time" FontFamily="JakartaSemiBold" FontSize="13" TextColor="{StaticResource InkSecondary}" />
-                                <Border Style="{StaticResource InputFieldBorder}">
-                                    <TimePicker Time="{Binding ScheduledTime}" HeightRequest="52" BackgroundColor="Transparent" />
-                                </Border>
-                            </VerticalStackLayout>
-                        </Grid>
+                        <VerticalStackLayout Spacing="6">
+                            <Label Text="Date" FontFamily="JakartaSemiBold" FontSize="13" TextColor="{StaticResource InkSecondary}" />
+                            <Border Style="{StaticResource InputFieldBorder}">
+                                <DatePicker Date="{Binding ScheduledDate}" HeightRequest="52" BackgroundColor="Transparent" />
+                            </Border>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout Spacing="6">
+                            <Label Text="Time" FontFamily="JakartaSemiBold" FontSize="13" TextColor="{StaticResource InkSecondary}" />
+                            <Border Style="{StaticResource InputFieldBorder}" HeightRequest="52">
+                                <TimePicker Time="{Binding ScheduledTime}" BackgroundColor="Transparent" />
+                            </Border>
+                        </VerticalStackLayout>
 
                     </VerticalStackLayout>
                 </Border>

@@ -43,7 +43,7 @@
 
         <!-- Form card scrolls over the header -->
         <ScrollView Margin="0,220,0,0">
-            <VerticalStackLayout Padding="24,0,24,40" Spacing="0">
+            <VerticalStackLayout Padding="24,0,24,40" Spacing="0" HorizontalOptions="Center" MinimumWidthRequest="{OnPlatform WinUI=400, Android=0}">
 
                 <!-- White card -->
                 <Border

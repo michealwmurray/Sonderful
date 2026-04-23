@@ -38,7 +38,8 @@
         <CollectionView
             Grid.Row="1"
             ItemsSource="{Binding Attendees}"
-            Margin="0,16,0,0">
+            Margin="0,16,0,0"
+            VerticalScrollBarVisibility="Never">
 
             <CollectionView.EmptyView>
                 <VerticalStackLayout
