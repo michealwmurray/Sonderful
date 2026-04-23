@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Text.Json;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -101,9 +102,12 @@ public partial class CreatePlanViewModel : ObservableObject
             var placemarks = await Geocoding.Default.GetPlacemarksAsync(lat, lon);
             var place = placemarks?.FirstOrDefault();
             if (place is not null)
-                return ($"{place.Locality ?? place.AdminArea}, {place.CountryName}", place.AdminArea);
+            {
+                var label = place.Locality ?? place.AdminArea;
+                return ($"{label}, {place.CountryName}", place.AdminArea);
+            }
         }
-        catch { }
+        catch (Exception ex) { Debug.WriteLine(ex.Message); }
 
         try
         {
@@ -122,7 +126,7 @@ public partial class CreatePlanViewModel : ObservableObject
             if (display is not null)
                 return ($"{display}, {country}", county);
         }
-        catch { }
+        catch (Exception ex) { Debug.WriteLine(ex.Message); }
 
         return null;
     }
