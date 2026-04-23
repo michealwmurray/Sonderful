@@ -41,7 +41,7 @@ public class CommentsController : ControllerBase
             await _commentService.DeleteCommentAsync(commentId, userId);
             return NoContent();
         }
-        catch (UnauthorizedAccessException ex) { return Forbid(ex.Message); }
+        catch (UnauthorizedAccessException) { return Forbid(); }
         catch (InvalidOperationException ex) { return NotFound(ex.Message); }
     }
 }
