@@ -72,7 +72,7 @@ jobs:
           /p:Threshold=70
           /p:ThresholdType=line
           /p:ThresholdStat=total
-          /p:ExcludeByFile="**/Migrations/*.cs,**/obj/**/*.cs"
+          '/p:ExcludeByFile=**/Migrations/*.cs,**/obj/**/*.cs'
 
   docker:
     runs-on: ubuntu-latest
