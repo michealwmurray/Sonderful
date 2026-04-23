@@ -1,6 +1,7 @@
 using System.Net;
 using System.Net.Http.Json;
 using Sonderful.API.DTOs.Plans;
+using Sonderful.API.DTOs.Users;
 
 namespace Sonderful.Tests.Integration;
 
@@ -277,5 +278,81 @@ public class PlansIntegrationTests : IntegrationTestBase
         var response = await _client.GetAsync("api/plans");
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task GetNearby_ByLatLng_ReturnsPlanNearby()
+    {
+        var owner = await RegisterAsync();
+        Authenticate(owner.Token);
+        await _client.PostAsJsonAsync("api/plans", new
+        {
+            title = "Dublin meetup",
+            description = "City centre hangout",
+            category = "Coffee",
+            capacity = 15,
+            latitude = 53.3498,
+            longitude = -6.2603,
+            county = "Dublin",
+            scheduledAt = DateTime.UtcNow.AddDays(4).ToString("o")
+        });
+
+        // Different user searches by coordinates near Dublin
+        var other = await RegisterAsync();
+        Authenticate(other.Token);
+
+        var response = await _client.GetAsync("api/plans?lat=53.3498&lng=-6.2603&radius=10");
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var plans = (await response.Content.ReadFromJsonAsync<List<PlanResponse>>(_jsonOpts))!;
+        Assert.Contains(plans, p => p.Title == "Dublin meetup");
+    }
+
+    [Fact]
+    public async Task GetAttendees_AfterRsvp_ReturnsAttendee()
+    {
+        var owner = await RegisterAsync();
+        Authenticate(owner.Token);
+        var created = (await (await _client.PostAsJsonAsync("api/plans", NewPlanPayload()))
+            .Content.ReadFromJsonAsync<PlanResponse>(_jsonOpts))!;
+
+        var attendee = await RegisterAsync();
+        Authenticate(attendee.Token);
+        await _client.PostAsync($"api/plans/{created.Id}/rsvp", null);
+
+        var response = await _client.GetAsync($"api/plans/{created.Id}/attendees");
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var attendees = (await response.Content.ReadFromJsonAsync<List<UserResponse>>(_jsonOpts))!;
+        Assert.Contains(attendees, u => u.Id == attendee.UserId);
+    }
+
+    [Fact]
+    public async Task DeletePlan_NonExisting_Returns404()
+    {
+        var auth = await RegisterAsync();
+        Authenticate(auth.Token);
+
+        var response = await _client.DeleteAsync("api/plans/999999");
+
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task UpdatePlan_NonExisting_Returns404()
+    {
+        var auth = await RegisterAsync();
+        Authenticate(auth.Token);
+
+        var response = await _client.PutAsJsonAsync("api/plans/999999", new
+        {
+            title = "Doesn't matter",
+            description = "No plan here",
+            category = "Coffee",
+            capacity = 5,
+            scheduledAt = DateTime.UtcNow.AddDays(7).ToString("o")
+        });
+
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
 }

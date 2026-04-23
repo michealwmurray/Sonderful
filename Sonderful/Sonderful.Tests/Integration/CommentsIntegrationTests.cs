@@ -112,4 +112,16 @@ public class CommentsIntegrationTests : IntegrationTestBase
 
         Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
     }
+
+    [Fact]
+    public async Task DeleteComment_NonExisting_Returns404()
+    {
+        var auth = await RegisterAsync();
+        Authenticate(auth.Token);
+        var planId = await CreatePlanAsync();
+
+        var response = await _client.DeleteAsync($"api/plans/{planId}/comments/999999");
+
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+    }
 }
