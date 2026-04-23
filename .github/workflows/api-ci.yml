@@ -69,7 +69,7 @@ jobs:
           --no-build
           --no-restore
           /p:CollectCoverage=true
-          /p:Threshold=55
+          /p:Threshold=70
           /p:ThresholdType=line
           /p:ThresholdStat=total
           /p:ExcludeByFile="**/Migrations/*.cs"
