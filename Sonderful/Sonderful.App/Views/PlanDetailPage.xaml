@@ -126,7 +126,7 @@
                 </Border>
 
                 <!-- Content cards -->
-                <VerticalStackLayout Padding="20,20,20,8" Spacing="16">
+                <VerticalStackLayout Padding="20,20,20,8" Spacing="16" MinimumWidthRequest="{OnPlatform WinUI=640, Android=0}" MaximumWidthRequest="900" HorizontalOptions="Center">
 
                     <!-- About card -->
                     <Border Style="{StaticResource CardBorder}">
@@ -264,15 +264,14 @@
                                 FontSize="16"
                                 TextColor="{StaticResource Ink}" />
 
-                            <CollectionView ItemsSource="{Binding Comments}">
-                                <CollectionView.EmptyView>
-                                    <Label
-                                        Text="No comments yet. Be the first!"
-                                        FontFamily="JakartaRegular"
-                                        FontSize="13"
-                                        TextColor="{StaticResource InkMuted}" />
-                                </CollectionView.EmptyView>
-                                <CollectionView.ItemTemplate>
+                            <Label
+                                Text="No comments yet. Be the first!"
+                                FontFamily="JakartaRegular"
+                                FontSize="13"
+                                TextColor="{StaticResource InkMuted}"
+                                IsVisible="{Binding HasNoComments}" />
+                            <VerticalStackLayout BindableLayout.ItemsSource="{Binding Comments}" Spacing="0">
+                                <BindableLayout.ItemTemplate>
                                     <DataTemplate x:DataType="dto:CommentResponse">
                                         <Grid
                                             ColumnDefinitions="*,Auto"
@@ -304,8 +303,8 @@
                                                 CommandParameter="{Binding .}" />
                                         </Grid>
                                     </DataTemplate>
-                                </CollectionView.ItemTemplate>
-                            </CollectionView>
+                                </BindableLayout.ItemTemplate>
+                            </VerticalStackLayout>
 
                         </VerticalStackLayout>
                     </Border>

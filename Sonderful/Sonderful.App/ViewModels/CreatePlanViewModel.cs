@@ -1,3 +1,5 @@
+using System.Diagnostics;
+using System.Text.Json;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Sonderful.App.Services;
@@ -65,29 +67,25 @@ public partial class CreatePlanViewModel : ObservableObject
             {
                 Latitude = location.Latitude;
                 Longitude = location.Longitude;
-                LocationLabel = $"{location.Latitude:F4}, {location.Longitude:F4}";
+                LocationLabel = "Getting location...";
 
-                // Try reverse geocode to get a readable name
-                try
+                // Reverse geocode to a readable name
+                var label = await ReverseGeocodeAsync(location.Latitude, location.Longitude);
+                if (label is { } loc)
                 {
-                    var placemarks = await Geocoding.Default.GetPlacemarksAsync(location.Latitude, location.Longitude);
-                    var place = placemarks?.FirstOrDefault();
-                    if (place is not null)
-                    {
-                        LocationLabel = $"{place.Locality ?? place.AdminArea}, {place.CountryName}";
+                    LocationLabel = loc.DisplayName;
 
-                        if (SelectedCounty is null && place.AdminArea is not null)
-                        {
-                            var match = DiscoverViewModel.IrishCounties
-                                .FirstOrDefault(c => place.AdminArea.Contains(c, StringComparison.OrdinalIgnoreCase));
-                            if (match is not null)
-                                SelectedCounty = match;
-                        }
+                    if (SelectedCounty is null && loc.AdminArea is not null)
+                    {
+                        var match = DiscoverViewModel.IrishCounties
+                            .FirstOrDefault(c => loc.AdminArea.Contains(c, StringComparison.OrdinalIgnoreCase));
+                        if (match is not null)
+                            SelectedCounty = match;
                     }
                 }
-                catch
+                else
                 {
-                    // Geocoding unavailable on this platform, coordinates already set above
+                    LocationLabel = $"{location.Latitude:F4}, {location.Longitude:F4}";
                 }
             }
         }
@@ -95,6 +93,51 @@ public partial class CreatePlanViewModel : ObservableObject
         {
             await Shell.Current.DisplayAlertAsync("Location error", ex.Message, "OK");
         }
+    }
+
+    private static async Task<(string DisplayName, string? AdminArea)?> ReverseGeocodeAsync(double lat, double lon)
+    {
+        if (DeviceInfo.Platform != DevicePlatform.WinUI)
+        {
+            try
+            {
+                var placemarks = await Geocoding.Default.GetPlacemarksAsync(lat, lon);
+                var place = placemarks?.FirstOrDefault();
+                if (place is not null)
+                {
+                    var label = place.Locality is not null ? place.Locality : place.AdminArea;
+                    return ($"{label}, {place.CountryName}", place.AdminArea);
+                }
+            }
+            catch (Exception ex) when (ex is FeatureNotSupportedException or PermissionException)
+            {
+                Debug.WriteLine(ex.Message);
+            }
+        }
+
+        try
+        {
+            using var http = new HttpClient();
+            http.DefaultRequestHeaders.UserAgent.ParseAdd("Sonderful/1.0");
+            var url = $"https://nominatim.openstreetmap.org/reverse?lat={lat}&lon={lon}&format=json";
+            var json = await http.GetStringAsync(url);
+            var doc = JsonDocument.Parse(json);
+            var addr = doc.RootElement.GetProperty("address");
+            var city = addr.TryGetProperty("city", out var c) ? c.GetString()
+                     : addr.TryGetProperty("town", out var t) ? t.GetString()
+                     : addr.TryGetProperty("village", out var v) ? v.GetString() : null;
+            var county = addr.TryGetProperty("county", out var co) ? co.GetString() : null;
+            var country = addr.TryGetProperty("country", out var ct) ? ct.GetString() : null;
+            var display = city ?? county ?? country;
+            if (display is not null)
+                return ($"{display}, {country}", county);
+        }
+        catch (Exception ex) when (ex is HttpRequestException or JsonException)
+        {
+            Debug.WriteLine(ex.Message);
+        }
+
+        return null;
     }
 
     [RelayCommand]

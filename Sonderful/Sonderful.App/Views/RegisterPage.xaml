@@ -19,17 +19,17 @@
             <Border.StrokeShape>
                 <RoundRectangle CornerRadius="0,0,40,40" />
             </Border.StrokeShape>
-            <VerticalStackLayout Padding="32,72,32,52" Spacing="6" HorizontalOptions="Center">
+            <VerticalStackLayout Padding="32,72,32,56" Spacing="6" HorizontalOptions="Center">
                 <Label
                     Text="✦"
                     FontFamily="JakartaExtraBold"
-                    FontSize="40"
+                    FontSize="44"
                     TextColor="White"
                     HorizontalOptions="Center" />
                 <Label
                     Text="Join Sonderful"
                     FontFamily="JakartaExtraBold"
-                    FontSize="32"
+                    FontSize="36"
                     TextColor="White"
                     HorizontalOptions="Center" />
                 <Label
@@ -42,8 +42,8 @@
         </Border>
 
         <!-- Form scrolls over the header -->
-        <ScrollView Margin="0,210,0,0">
-            <VerticalStackLayout Padding="24,0,24,40" Spacing="0">
+        <ScrollView Margin="0,220,0,0">
+            <VerticalStackLayout Padding="24,0,24,40" Spacing="0" HorizontalOptions="Center" MinimumWidthRequest="{OnPlatform WinUI=400, Android=0}">
 
                 <!-- White card -->
                 <Border

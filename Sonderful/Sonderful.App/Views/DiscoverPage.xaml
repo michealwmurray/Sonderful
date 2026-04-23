@@ -72,7 +72,10 @@
             ItemsSource="{Binding Plans}"
             SelectionMode="Single"
             SelectedItem="{Binding SelectedPlan, Mode=TwoWay}"
-            Margin="0,12,0,0">
+            Margin="0,12,0,0"
+            MaximumWidthRequest="712"
+            HorizontalOptions="Center"
+            VerticalScrollBarVisibility="Never">
 
             <CollectionView.EmptyView>
                 <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="10" Margin="0,60,0,0">
@@ -213,7 +216,7 @@
                     <Shadow Brush="Black" Opacity="0.18" Offset="0,-4" Radius="24" />
                 </Border.Shadow>
 
-                <VerticalStackLayout Padding="24,20,24,36" Spacing="20">
+                <VerticalStackLayout Padding="24,20,24,36" Spacing="20" MaximumWidthRequest="600" HorizontalOptions="Center">
 
                     <!-- Handle + title row -->
                     <Grid ColumnDefinitions="*,Auto">
@@ -256,12 +259,11 @@
                             FontFamily="JakartaSemiBold"
                             FontSize="13"
                             TextColor="{StaticResource InkSecondary}" />
-                        <Border Style="{StaticResource InputFieldBorder}">
+                        <Border Style="{StaticResource InputFieldBorder}" Padding="14,10">
                             <Picker
                                 Title="All counties (use GPS)"
                                 ItemsSource="{Binding Counties}"
                                 SelectedItem="{Binding SelectedCounty}"
-                                HeightRequest="52"
                                 BackgroundColor="Transparent" />
                         </Border>
                     </VerticalStackLayout>
@@ -290,12 +292,11 @@
                             FontFamily="JakartaSemiBold"
                             FontSize="13"
                             TextColor="{StaticResource InkSecondary}" />
-                        <Border Style="{StaticResource InputFieldBorder}">
+                        <Border Style="{StaticResource InputFieldBorder}" Padding="14,10">
                             <Picker
                                 Title="All categories"
                                 ItemsSource="{Binding Categories}"
                                 SelectedItem="{Binding SelectedCategory}"
-                                HeightRequest="52"
                                 BackgroundColor="Transparent" />
                         </Border>
                     </VerticalStackLayout>
