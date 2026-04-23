@@ -97,17 +97,23 @@ public partial class CreatePlanViewModel : ObservableObject
 
     private static async Task<(string DisplayName, string? AdminArea)?> ReverseGeocodeAsync(double lat, double lon)
     {
-        try
+        if (DeviceInfo.Platform != DevicePlatform.WinUI)
         {
-            var placemarks = await Geocoding.Default.GetPlacemarksAsync(lat, lon);
-            var place = placemarks?.FirstOrDefault();
-            if (place is not null)
+            try
             {
-                var label = place.Locality ?? place.AdminArea;
-                return ($"{label}, {place.CountryName}", place.AdminArea);
+                var placemarks = await Geocoding.Default.GetPlacemarksAsync(lat, lon);
+                var place = placemarks?.FirstOrDefault();
+                if (place is not null)
+                {
+                    var label = place.Locality is not null ? place.Locality : place.AdminArea;
+                    return ($"{label}, {place.CountryName}", place.AdminArea);
+                }
+            }
+            catch (Exception ex) when (ex is FeatureNotSupportedException or PermissionException)
+            {
+                Debug.WriteLine(ex.Message);
             }
         }
-        catch (Exception ex) { Debug.WriteLine(ex.Message); }
 
         try
         {
@@ -126,7 +132,10 @@ public partial class CreatePlanViewModel : ObservableObject
             if (display is not null)
                 return ($"{display}, {country}", county);
         }
-        catch (Exception ex) { Debug.WriteLine(ex.Message); }
+        catch (Exception ex) when (ex is HttpRequestException or JsonException)
+        {
+            Debug.WriteLine(ex.Message);
+        }
 
         return null;
     }
