@@ -92,12 +92,18 @@
                                     FontFamily="JakartaSemiBold"
                                     FontSize="13"
                                     TextColor="{StaticResource InkSecondary}" />
-                                <Border Style="{StaticResource InputFieldBorder}" Padding="14,10" HeightRequest="52">
+                                <Border Style="{StaticResource InputFieldBorder}" Padding="{OnPlatform Android='14,0', Default='14,10'}" HeightRequest="52">
                                     <Picker
                                         Title="{OnPlatform Android='', Default='Pick one'}"
                                         ItemsSource="{Binding Categories}"
                                         SelectedItem="{Binding SelectedCategory}"
-                                        BackgroundColor="Transparent" />
+                                        BackgroundColor="Transparent">
+                                        <Picker.TextColor>
+                                            <OnPlatform x:TypeArguments="Color">
+                                                <On Platform="Android" Value="{StaticResource Ink}" />
+                                            </OnPlatform>
+                                        </Picker.TextColor>
+                                    </Picker>
                                 </Border>
                             </VerticalStackLayout>
                             <VerticalStackLayout Grid.Column="1" Spacing="6">
@@ -106,12 +112,18 @@
                                     FontFamily="JakartaSemiBold"
                                     FontSize="13"
                                     TextColor="{StaticResource InkSecondary}" />
-                                <Border Style="{StaticResource InputFieldBorder}" Padding="14,10" HeightRequest="52">
+                                <Border Style="{StaticResource InputFieldBorder}" Padding="{OnPlatform Android='14,0', Default='14,10'}" HeightRequest="52">
                                     <Picker
                                         Title="{OnPlatform Android='', Default='Optional'}"
                                         ItemsSource="{Binding Counties}"
                                         SelectedItem="{Binding SelectedCounty}"
-                                        BackgroundColor="Transparent" />
+                                        BackgroundColor="Transparent">
+                                        <Picker.TextColor>
+                                            <OnPlatform x:TypeArguments="Color">
+                                                <On Platform="Android" Value="{StaticResource Ink}" />
+                                            </OnPlatform>
+                                        </Picker.TextColor>
+                                    </Picker>
                                 </Border>
                             </VerticalStackLayout>
                         </Grid>
