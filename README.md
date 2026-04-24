@@ -3,17 +3,28 @@ Sonderful is a cross-platform mobile application that helps adults combat social
 
 ## Screenshots
 
-Below are some screens from the Windows build.
+### Windows
 
 <p align="center">
-  <img src="docs/screenshots/login.png" width="30%" />
-  <img src="docs/screenshots/register.png" width="30%" />
-  <img src="docs/screenshots/discover.png" width="30%" />
+  <img src="docs/screenshots/login-windows.png" width="30%" />
+  <img src="docs/screenshots/register-windows.png" width="30%" />
+  <img src="docs/screenshots/discover-windows.png" width="30%" />
 </p>
 <p align="center">
-  <img src="docs/screenshots/plan-detail.png" width="30%" />
-  <img src="docs/screenshots/new-plan.png" width="30%" />
-  <img src="docs/screenshots/profile.png" width="30%" />
+  <img src="docs/screenshots/plan-detail-windows.png" width="30%" />
+  <img src="docs/screenshots/new-plan-windows.png" width="30%" />
+  <img src="docs/screenshots/profile-windows.png" width="30%" />
+</p>
+
+### Android
+
+<p align="center">
+  <img src="docs/screenshots/login-android.png" width="18%" />
+  <img src="docs/screenshots/register-android.png" width="18%" />
+  <img src="docs/screenshots/discover-android.png" width="18%" />
+  <img src="docs/screenshots/plan-detail-android.png" width="18%" />
+  <img src="docs/screenshots/new-plan-android.png" width="18%" />
+  <img src="docs/screenshots/profile-android.png" width="18%" />
 </p>
 
 ## Tech Stack
@@ -52,4 +63,4 @@ Sonderful.Tests/   - Unit and integration tests
 
 ## Tests
 
-Open Test Explorer in Visual Studio and run all tests. 60+ tests covering auth, plans, comments, scoring and integration.
+Open Test Explorer in Visual Studio and run all tests. 80 tests covering auth, plans, comments, scoring and integration.
