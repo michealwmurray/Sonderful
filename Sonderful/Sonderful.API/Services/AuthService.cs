@@ -22,6 +22,9 @@ public class AuthService : IAuthService
 
     public async Task<AuthResponse> RegisterAsync(RegisterRequest request)
     {
+        if (await _users.GetByUsernameAsync(request.Username) is not null)
+            throw new InvalidOperationException("That username is already taken.");
+
         var existing = await _users.GetByEmailAsync(request.Email);
         if (existing is not null)
             throw new InvalidOperationException("An account with that email already exists.");

@@ -8,8 +8,11 @@ namespace Sonderful.App.Services;
 
 public class ApiService : IApiService
 {
-    // To be updated if the API runs on a different port
+#if ANDROID
+    public const string BaseUrl = "http://10.0.2.2:5082";
+#else
     public const string BaseUrl = "http://localhost:5082";
+#endif
 
     private static readonly JsonSerializerOptions _jsonOpts = new()
     {
