@@ -89,9 +89,17 @@ public partial class CreatePlanViewModel : ObservableObject
                 }
             }
         }
-        catch (Exception ex)
+        catch (PermissionException)
         {
-            await Shell.Current.DisplayAlertAsync("Location error", ex.Message, "OK");
+            await Shell.Current.DisplayAlertAsync("Location unavailable", "Please allow location access and try again.", "OK");
+        }
+        catch (Exception ex) when (ex is FeatureNotSupportedException)
+        {
+            await Shell.Current.DisplayAlertAsync("Location unavailable", "Location is not supported on this device.", "OK");
+        }
+        catch
+        {
+            await Shell.Current.DisplayAlertAsync("Location unavailable", "Couldn't get your location. Try again.", "OK");
         }
     }
 

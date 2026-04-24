@@ -94,7 +94,7 @@
                                     TextColor="{StaticResource InkSecondary}" />
                                 <Border Style="{StaticResource InputFieldBorder}" Padding="14,10" HeightRequest="52">
                                     <Picker
-                                        Title="Pick one"
+                                        Title="{OnPlatform Android='', Default='Pick one'}"
                                         ItemsSource="{Binding Categories}"
                                         SelectedItem="{Binding SelectedCategory}"
                                         BackgroundColor="Transparent" />
@@ -108,7 +108,7 @@
                                     TextColor="{StaticResource InkSecondary}" />
                                 <Border Style="{StaticResource InputFieldBorder}" Padding="14,10" HeightRequest="52">
                                     <Picker
-                                        Title="Optional"
+                                        Title="{OnPlatform Android='', Default='Optional'}"
                                         ItemsSource="{Binding Counties}"
                                         SelectedItem="{Binding SelectedCounty}"
                                         BackgroundColor="Transparent" />

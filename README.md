@@ -1,5 +1,5 @@
 # Sonderful
-Sonderful helps adults combat social isolation by making it easy to discover and join spontaneous, casual plans with people nearby - a walk, a pint, a coffee, a kickabout. Built with .NET MAUI and ASP.NET Web API.
+Sonderful is a cross-platform mobile application that helps adults combat social isolation by making it easy to discover and join spontaneous, casual plans with people nearby - a walk, a pint, a coffee, a kickabout. Built with .NET MAUI and ASP.NET Web API, it runs on both Windows and Android.
 
 ## Screenshots
 
@@ -38,7 +38,9 @@ Below are some screens from the Windows build.
 
 1. Clone the repo and open `Sonderful.slnx` in Visual Studio
 2. Set `Sonderful.API` as the startup project and run it - the API starts on `http://localhost:5082`
-3. Switch the startup project to `Sonderful.App` and run targeting Windows
+3. Switch the startup project to `Sonderful.App` and run targeting Windows or an Android emulator
+
+The API URL is configured automatically - `localhost:5082` for Windows and `10.0.2.2:5082` for Android emulator.
 
 ## Project Structure
 
