@@ -22,6 +22,8 @@ Sonderful is a cross-platform mobile application that helps adults combat social
   <img src="docs/screenshots/login-android.png" width="18%" />
   <img src="docs/screenshots/register-android.png" width="18%" />
   <img src="docs/screenshots/discover-android.png" width="18%" />
+</p>
+<p align="center">
   <img src="docs/screenshots/plan-detail-android.png" width="18%" />
   <img src="docs/screenshots/new-plan-android.png" width="18%" />
   <img src="docs/screenshots/profile-android.png" width="18%" />
