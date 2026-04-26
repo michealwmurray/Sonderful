@@ -152,7 +152,7 @@ public class PlanService : IPlanService
         CreatorId = plan.CreatorId,
         CreatorUsername = plan.Creator?.Username ?? string.Empty,
         CreatorPhotoUrl = plan.Creator?.PhotoUrl,
-        CreatorSonderScore = 0, // TODO: wire up once SonderScore service exists
+        CreatorSonderScore = 0,
         IsRsvped = requestingUserId > 0 && plan.Rsvps.Any(r => r.UserId == requestingUserId),
         Photos = plan.Photos.Select(p => new DTOs.Plans.PlanPhotoDto { Id = p.Id, Url = p.Url }).ToList()
     };
