@@ -84,22 +84,58 @@
             <VerticalStackLayout Padding="24,20,24,40" Spacing="16" MaximumWidthRequest="600" HorizontalOptions="Center">
 
                 <!-- Name + bio -->
-                <VerticalStackLayout Spacing="4" HorizontalOptions="Center">
+                <VerticalStackLayout Spacing="8" HorizontalOptions="Center">
                     <Label
                         Text="{Binding Username}"
                         FontFamily="JakartaExtraBold"
                         FontSize="26"
                         TextColor="{StaticResource Ink}"
                         HorizontalOptions="Center" />
-                    <Label
-                        Text="{Binding Bio}"
-                        FontFamily="JakartaRegular"
-                        FontSize="14"
-                        TextColor="{StaticResource InkSecondary}"
-                        HorizontalOptions="Center"
-                        HorizontalTextAlignment="Center"
-                        IsVisible="{Binding HasBio}"
-                        MaximumWidthRequest="300" />
+
+                    <!-- Display mode -->
+                    <VerticalStackLayout Spacing="4" IsVisible="{Binding IsNotEditing}">
+                        <Label
+                            Text="{Binding Bio}"
+                            FontFamily="JakartaRegular"
+                            FontSize="14"
+                            TextColor="{StaticResource InkSecondary}"
+                            HorizontalOptions="Center"
+                            HorizontalTextAlignment="Center"
+                            IsVisible="{Binding HasBio}"
+                            MaximumWidthRequest="300" />
+                        <Button
+                            Text="Edit bio"
+                            Command="{Binding StartEditBioCommand}"
+                            BackgroundColor="Transparent"
+                            TextColor="{StaticResource Brand}"
+                            FontFamily="JakartaMedium"
+                            FontSize="13"
+                            HeightRequest="36"
+                            Padding="0" />
+                    </VerticalStackLayout>
+
+                    <!-- Edit mode -->
+                    <VerticalStackLayout Spacing="8" IsVisible="{Binding IsEditing}" MaximumWidthRequest="300">
+                        <Border Style="{StaticResource InputFieldBorder}">
+                            <Editor
+                                Placeholder="Write something about yourself"
+                                Text="{Binding DraftBio}"
+                                HeightRequest="80"
+                                BackgroundColor="Transparent"
+                                Margin="4,4,4,4" />
+                        </Border>
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
+                            <Button
+                                Grid.Column="0"
+                                Text="Save"
+                                Command="{Binding SaveBioCommand}" />
+                            <Button
+                                Grid.Column="1"
+                                Text="Cancel"
+                                Command="{Binding CancelEditBioCommand}"
+                                Style="{StaticResource OutlineButton}" />
+                        </Grid>
+                    </VerticalStackLayout>
                 </VerticalStackLayout>
 
                 <!-- Sonder Score card -->

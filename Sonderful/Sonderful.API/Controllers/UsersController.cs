@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Sonderful.API.DTOs.Users;
 using Sonderful.API.Repositories;
 using Sonderful.API.Services;
 
@@ -20,6 +21,28 @@ public class UsersController : ControllerBase
         _scoreService = scoreService;
         _users = users;
         _env = env;
+    }
+
+    [HttpGet("me")]
+    public async Task<IActionResult> GetMyProfile()
+    {
+        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        var user = await _users.GetByIdAsync(userId);
+        if (user is null)
+            return NotFound();
+        return Ok(new { bio = user.Bio });
+    }
+
+    [HttpPut("me")]
+    public async Task<IActionResult> UpdateProfile([FromBody] UpdateProfileRequest request)
+    {
+        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        var user = await _users.GetByIdAsync(userId);
+        if (user is null)
+            return NotFound();
+        user.Bio = request.Bio;
+        await _users.UpdateAsync(user);
+        return Ok(new { bio = user.Bio });
     }
 
     // Returns the average SonderScore for a user

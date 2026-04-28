@@ -200,6 +200,22 @@ public class ApiService : IApiService
         await EnsureSuccessAsync(response);
     }
 
+    public async Task<string?> GetMyBioAsync()
+    {
+        SetAuthHeader();
+        var response = await _http.GetAsync("api/users/me");
+        await EnsureSuccessAsync(response);
+        using var doc = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
+        return doc.RootElement.TryGetProperty("bio", out var bio) ? bio.GetString() : null;
+    }
+
+    public async Task UpdateBioAsync(string? bio)
+    {
+        SetAuthHeader();
+        var response = await _http.PutAsJsonAsync("api/users/me", new { bio });
+        await EnsureSuccessAsync(response);
+    }
+
     public async Task<string> UploadProfilePhotoAsync(Stream photoStream, string fileName, string contentType)
     {
         SetAuthHeader();

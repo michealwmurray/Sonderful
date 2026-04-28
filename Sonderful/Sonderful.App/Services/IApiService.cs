@@ -31,6 +31,10 @@ public interface IApiService
     Task<double> GetUserScoreAsync(int userId);
     Task SubmitScoreAsync(int planId, int ratedUserId, int score);
 
+    // Profile
+    Task<string?> GetMyBioAsync();
+    Task UpdateBioAsync(string? bio);
+
     // Photos
     Task<string> UploadProfilePhotoAsync(Stream photoStream, string fileName, string contentType);
     Task<(int photoId, string url)> UploadPlanPhotoAsync(int planId, Stream photoStream, string fileName, string contentType);
