@@ -29,4 +29,31 @@ public class UsersIntegrationTests : IntegrationTestBase
 
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
+
+    [Fact]
+    public async Task UpdateBio_SavesAndReturns()
+    {
+        var auth = await RegisterAsync();
+        Authenticate(auth.Token);
+
+        var response = await _client.PutAsJsonAsync("api/users/me", new { bio = "Love hiking and coffee" });
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var body = await response.Content.ReadFromJsonAsync<System.Text.Json.JsonElement>();
+        Assert.Equal("Love hiking and coffee", body.GetProperty("bio").GetString());
+    }
+
+    [Fact]
+    public async Task GetMyProfile_ReturnsUpdatedBio()
+    {
+        var auth = await RegisterAsync();
+        Authenticate(auth.Token);
+
+        await _client.PutAsJsonAsync("api/users/me", new { bio = "Weekend cyclist" });
+        var response = await _client.GetAsync("api/users/me");
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var body = await response.Content.ReadFromJsonAsync<System.Text.Json.JsonElement>();
+        Assert.Equal("Weekend cyclist", body.GetProperty("bio").GetString());
+    }
 }

@@ -27,6 +27,16 @@ public partial class ProfileViewModel : ObservableObject
     [ObservableProperty]
     private string? _photoUrl;
 
+    [ObservableProperty]
+    private bool _isEditing;
+
+    public bool IsNotEditing => !IsEditing;
+
+    partial void OnIsEditingChanged(bool value) => OnPropertyChanged(nameof(IsNotEditing));
+
+    [ObservableProperty]
+    private string _draftBio = string.Empty;
+
     public string Initials => string.IsNullOrWhiteSpace(Username)
         ? "?"
         : Username[0].ToString().ToUpperInvariant();
@@ -47,16 +57,41 @@ public partial class ProfileViewModel : ObservableObject
     private async Task Load()
     {
         Username = _session.Username;
-        // may already be absolute after an in-session upload
         PhotoUrl = _session.PhotoUrl is { } p
             ? (p.StartsWith('/') ? ApiService.BaseUrl + p : p)
             : null;
         try
         {
             SonderScore = await _api.GetUserScoreAsync(_session.UserId);
+            Bio = await _api.GetMyBioAsync();
         }
-        catch { /* score fetch failing should not block the profile page */ }
+        catch { /* non-critical, don't block the profile page */ }
     }
+
+    [RelayCommand]
+    private void StartEditBio()
+    {
+        DraftBio = Bio ?? string.Empty;
+        IsEditing = true;
+    }
+
+    [RelayCommand]
+    private async Task SaveBio()
+    {
+        try
+        {
+            await _api.UpdateBioAsync(string.IsNullOrWhiteSpace(DraftBio) ? null : DraftBio);
+            Bio = string.IsNullOrWhiteSpace(DraftBio) ? null : DraftBio;
+            IsEditing = false;
+        }
+        catch (Exception ex)
+        {
+            await Shell.Current.DisplayAlertAsync("Error", ex.Message, "OK");
+        }
+    }
+
+    [RelayCommand]
+    private void CancelEditBio() => IsEditing = false;
 
     [RelayCommand]
     private async Task ChangePhoto()
