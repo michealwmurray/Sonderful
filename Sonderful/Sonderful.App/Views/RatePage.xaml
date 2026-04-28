@@ -87,25 +87,38 @@
                             ColumnSpacing="14"
                             Padding="16,14">
 
-                            <!-- Avatar initials circle -->
-                            <Border
-                                Grid.Column="0"
-                                HeightRequest="44"
-                                WidthRequest="44"
-                                BackgroundColor="{StaticResource BrandLight}"
-                                Stroke="Transparent"
-                                StrokeThickness="0">
-                                <Border.StrokeShape>
-                                    <RoundRectangle CornerRadius="22" />
-                                </Border.StrokeShape>
-                                <Label
-                                    Text="{Binding User.Username, StringFormat='{0:0}'}"
-                                    FontFamily="JakartaExtraBold"
-                                    FontSize="18"
-                                    TextColor="{StaticResource Brand}"
-                                    HorizontalOptions="Center"
-                                    VerticalOptions="Center" />
-                            </Border>
+                            <!-- Avatar: photo or initials fallback -->
+                            <Grid Grid.Column="0" HeightRequest="44" WidthRequest="44">
+                                <Border
+                                    HeightRequest="44"
+                                    WidthRequest="44"
+                                    BackgroundColor="{StaticResource BrandLight}"
+                                    Stroke="Transparent"
+                                    StrokeThickness="0"
+                                    IsVisible="{Binding HasNoPhoto}">
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="22" />
+                                    </Border.StrokeShape>
+                                    <Label
+                                        Text="{Binding Initial}"
+                                        FontFamily="JakartaExtraBold"
+                                        FontSize="18"
+                                        TextColor="{StaticResource Brand}"
+                                        HorizontalOptions="Center"
+                                        VerticalOptions="Center" />
+                                </Border>
+                                <Border
+                                    HeightRequest="44"
+                                    WidthRequest="44"
+                                    Stroke="Transparent"
+                                    StrokeThickness="0"
+                                    IsVisible="{Binding HasPhoto}">
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="22" />
+                                    </Border.StrokeShape>
+                                    <Image Source="{Binding User.PhotoUrl}" Aspect="AspectFill" />
+                                </Border>
+                            </Grid>
 
                             <!-- Username -->
                             <Label

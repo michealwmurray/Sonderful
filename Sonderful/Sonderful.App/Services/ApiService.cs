@@ -181,7 +181,10 @@ public class ApiService : IApiService
         SetAuthHeader();
         var response = await _http.GetAsync($"api/plans/{planId}/attendees");
         await EnsureSuccessAsync(response);
-        return (await response.Content.ReadFromJsonAsync<List<UserResponse>>(_jsonOpts))!;
+        var users = (await response.Content.ReadFromJsonAsync<List<UserResponse>>(_jsonOpts))!;
+        foreach (var u in users.Where(u => u.PhotoUrl is not null))
+            u.PhotoUrl = AbsoluteUrl(u.PhotoUrl!);
+        return users;
     }
 
     public async Task<double> GetUserScoreAsync(int userId)

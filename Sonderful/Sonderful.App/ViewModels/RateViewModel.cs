@@ -93,6 +93,10 @@ public partial class AttendeeRating : ObservableObject
 
     public List<int> Scores { get; } = [1, 2, 3, 4, 5];
 
+    public bool HasPhoto => !string.IsNullOrWhiteSpace(User.PhotoUrl);
+    public bool HasNoPhoto => string.IsNullOrWhiteSpace(User.PhotoUrl);
+    public string Initial => string.IsNullOrWhiteSpace(User.Username) ? "?" : User.Username[0].ToString().ToUpperInvariant();
+
     [ObservableProperty]
     private int _selectedScore;
 
