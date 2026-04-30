@@ -1,4 +1,5 @@
-using Microsoft.AspNetCore.Mvc;using Sonderful.API.DTOs.Auth;
+using Microsoft.AspNetCore.Mvc;
+using Sonderful.API.DTOs.Auth;
 using Sonderful.API.Services;
 
 namespace Sonderful.API.Controllers;
