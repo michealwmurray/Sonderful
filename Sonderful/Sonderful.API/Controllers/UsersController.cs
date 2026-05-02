@@ -45,6 +45,16 @@ public class UsersController : ControllerBase
         return Ok(new { bio = user.Bio });
     }
 
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetUserProfile(int id)
+    {
+        var user = await _users.GetByIdAsync(id);
+        if (user is null)
+            return NotFound();
+        var score = await _scoreService.GetAverageForUserAsync(id);
+        return Ok(new { id = user.Id, username = user.Username, bio = user.Bio, photoUrl = user.PhotoUrl, sonderScore = score });
+    }
+
     // Returns the average SonderScore for a user
     [HttpGet("{id}/score")]
     public async Task<IActionResult> GetScore(int id)

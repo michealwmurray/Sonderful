@@ -45,6 +45,8 @@ public static class MauiProgram
         builder.Services.AddTransient<RateViewModel>();
         builder.Services.AddTransient<ProfilePage>();
         builder.Services.AddTransient<ProfileViewModel>();
+        builder.Services.AddTransient<UserProfilePage>();
+        builder.Services.AddTransient<UserProfileViewModel>();
 
 #if DEBUG
         builder.Logging.AddDebug();

@@ -31,6 +31,9 @@ public interface IApiService
     Task<double> GetUserScoreAsync(int userId);
     Task SubmitScoreAsync(int planId, int ratedUserId, int score);
 
+    // Public profiles
+    Task<PublicUserProfile> GetUserProfileAsync(int userId);
+
     // Profile
     Task<string?> GetMyBioAsync();
     Task UpdateBioAsync(string? bio);

@@ -29,10 +29,14 @@ public partial class DiscoverViewModel : ObservableObject
     ];
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HasNoPlans))]
     private ObservableCollection<PlanResponse> _plans = [];
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HasNoPlans))]
     private bool _isBusy;
+
+    public bool HasNoPlans => !IsBusy && Plans.Count == 0;
 
     // Label shown below the page title describing the active search
     [ObservableProperty]
@@ -45,7 +49,15 @@ public partial class DiscoverViewModel : ObservableObject
     private List<string> _counties = IrishCounties;
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsCountyNotSelected))]
+    [NotifyPropertyChangedFor(nameof(IsCountySelected))]
     private string? _selectedCounty;
+
+    public bool IsCountyNotSelected => string.IsNullOrEmpty(SelectedCounty);
+    public bool IsCountySelected => !string.IsNullOrEmpty(SelectedCounty);
+
+    [RelayCommand]
+    private void ClearCounty() => SelectedCounty = null;
 
     [ObservableProperty]
     private List<string> _categories = [.. Enum.GetNames<PlanCategory>()];

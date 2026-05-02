@@ -121,6 +121,14 @@ public partial class PlanDetailViewModel : ObservableObject, IQueryAttributable
     }
 
     [RelayCommand]
+    private async Task NavigateToHostProfile()
+    {
+        if (Plan is null)
+            return;
+        await Shell.Current.GoToAsync($"{nameof(Views.UserProfilePage)}?userId={Plan.CreatorId}");
+    }
+
+    [RelayCommand]
     private async Task RateAttendees()
     {
         if (Plan is null)

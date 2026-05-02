@@ -77,26 +77,8 @@
             HorizontalOptions="Center"
             VerticalScrollBarVisibility="Never">
 
-            <CollectionView.EmptyView>
-                <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="10" Margin="0,60,0,0">
-                    <Label
-                        Text="No plans found"
-                        FontFamily="JakartaBold"
-                        FontSize="18"
-                        TextColor="{StaticResource InkMuted}"
-                        HorizontalOptions="Center" />
-                    <Label
-                        Text="Tap Refine to adjust your search area or category"
-                        FontFamily="JakartaRegular"
-                        FontSize="14"
-                        TextColor="{StaticResource InkMuted}"
-                        HorizontalOptions="Center"
-                        HorizontalTextAlignment="Center"
-                        MaximumWidthRequest="260" />
-                </VerticalStackLayout>
-            </CollectionView.EmptyView>
 
-            <CollectionView.ItemsLayout>
+<CollectionView.ItemsLayout>
                 <LinearItemsLayout Orientation="Vertical" ItemSpacing="12" />
             </CollectionView.ItemsLayout>
 
@@ -190,6 +172,29 @@
             VerticalOptions="Center"
             HorizontalOptions="Center" />
 
+        <!-- Empty state -->
+        <VerticalStackLayout
+            Grid.Row="1"
+            IsVisible="{Binding HasNoPlans}"
+            VerticalOptions="Center"
+            HorizontalOptions="Center"
+            Spacing="10">
+            <Label
+                Text="No plans found"
+                FontFamily="JakartaBold"
+                FontSize="18"
+                TextColor="{StaticResource InkMuted}"
+                HorizontalOptions="Center" />
+            <Label
+                Text="Tap Refine to adjust your search area or category"
+                FontFamily="JakartaRegular"
+                FontSize="14"
+                TextColor="{StaticResource InkMuted}"
+                HorizontalOptions="Center"
+                HorizontalTextAlignment="Center"
+                MaximumWidthRequest="260" />
+        </VerticalStackLayout>
+
         <!-- ── Refine overlay (spans full page) ── -->
         <Grid
             Grid.Row="0"
@@ -203,14 +208,16 @@
                 </Grid.GestureRecognizers>
             </Grid>
 
-            <!-- Bottom sheet panel -->
+            <!-- Refine panel -->
             <Border
-                VerticalOptions="End"
+                VerticalOptions="Center"
+                HorizontalOptions="Center"
+                MaximumWidthRequest="640"
                 BackgroundColor="{StaticResource Surface}"
                 Stroke="Transparent"
                 StrokeThickness="0">
                 <Border.StrokeShape>
-                    <RoundRectangle CornerRadius="28,28,0,0" />
+                    <RoundRectangle CornerRadius="28" />
                 </Border.StrokeShape>
                 <Border.Shadow>
                     <Shadow Brush="Black" Opacity="0.18" Offset="0,-4" Radius="24" />
@@ -218,27 +225,28 @@
 
                 <VerticalStackLayout Padding="24,20,24,36" Spacing="20" MaximumWidthRequest="600" HorizontalOptions="Center">
 
-                    <!-- Handle + title row -->
+                    <!-- Drag handle pill (centered) -->
+                    <Border
+                        HeightRequest="4"
+                        WidthRequest="40"
+                        BackgroundColor="{StaticResource Gray300}"
+                        Stroke="Transparent"
+                        StrokeThickness="0"
+                        HorizontalOptions="Center">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="2" />
+                        </Border.StrokeShape>
+                    </Border>
+
+                    <!-- Title row -->
                     <Grid ColumnDefinitions="*,Auto">
-                        <VerticalStackLayout Grid.Column="0" Spacing="8">
-                            <!-- Drag handle pill -->
-                            <Border
-                                HeightRequest="4"
-                                WidthRequest="40"
-                                BackgroundColor="{StaticResource Gray300}"
-                                Stroke="Transparent"
-                                StrokeThickness="0"
-                                HorizontalOptions="Start">
-                                <Border.StrokeShape>
-                                    <RoundRectangle CornerRadius="2" />
-                                </Border.StrokeShape>
-                            </Border>
-                            <Label
-                                Text="Refine Search"
-                                FontFamily="JakartaBold"
-                                FontSize="20"
-                                TextColor="{StaticResource Ink}" />
-                        </VerticalStackLayout>
+                        <Label
+                            Grid.Column="0"
+                            Text="Refine Search"
+                            FontFamily="JakartaBold"
+                            FontSize="20"
+                            TextColor="{StaticResource Ink}"
+                            VerticalOptions="Center" />
                         <Button
                             Grid.Column="1"
                             Text="✕"
@@ -249,16 +257,31 @@
                             HeightRequest="40"
                             WidthRequest="40"
                             Padding="0"
-                            VerticalOptions="Start" />
+                            VerticalOptions="Center" />
                     </Grid>
 
                     <!-- County -->
                     <VerticalStackLayout Spacing="8">
-                        <Label
-                            Text="County"
-                            FontFamily="JakartaSemiBold"
-                            FontSize="13"
-                            TextColor="{StaticResource InkSecondary}" />
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label
+                                Grid.Column="0"
+                                Text="County"
+                                FontFamily="JakartaSemiBold"
+                                FontSize="13"
+                                TextColor="{StaticResource InkSecondary}"
+                                VerticalOptions="Center" />
+                            <Button
+                                Grid.Column="1"
+                                Text="Use my location"
+                                Command="{Binding ClearCountyCommand}"
+                                IsVisible="{Binding IsCountySelected}"
+                                BackgroundColor="Transparent"
+                                TextColor="{StaticResource Brand}"
+                                FontFamily="JakartaMedium"
+                                FontSize="13"
+                                HeightRequest="28"
+                                Padding="0" />
+                        </Grid>
                         <Border Style="{StaticResource InputFieldBorder}" Padding="14,10">
                             <Picker
                                 Title="All counties (use GPS)"
@@ -269,9 +292,9 @@
                     </VerticalStackLayout>
 
                     <!-- Distance -->
-                    <VerticalStackLayout Spacing="8">
+                    <VerticalStackLayout Spacing="8" IsVisible="{Binding IsCountyNotSelected}">
                         <Label
-                            Text="Distance (km) - used when no county selected"
+                            Text="Search radius (km)"
                             FontFamily="JakartaSemiBold"
                             FontSize="13"
                             TextColor="{StaticResource InkSecondary}" />
