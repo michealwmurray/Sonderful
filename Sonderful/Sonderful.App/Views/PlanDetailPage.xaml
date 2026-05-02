@@ -97,6 +97,9 @@
                                     TextColor="White" />
                             </VerticalStackLayout>
                             <VerticalStackLayout Spacing="2">
+                                <VerticalStackLayout.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding NavigateToHostProfileCommand}" />
+                                </VerticalStackLayout.GestureRecognizers>
                                 <Label
                                     Text="Host"
                                     FontFamily="JakartaSemiBold"
@@ -106,7 +109,8 @@
                                     Text="{Binding Plan.CreatorUsername}"
                                     FontFamily="JakartaSemiBold"
                                     FontSize="14"
-                                    TextColor="White" />
+                                    TextColor="White"
+                                    TextDecorations="Underline" />
                             </VerticalStackLayout>
                             <VerticalStackLayout Spacing="2">
                                 <Label

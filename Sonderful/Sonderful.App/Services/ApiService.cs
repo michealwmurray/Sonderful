@@ -247,6 +247,17 @@ public class ApiService : IApiService
         return (id, url);
     }
 
+    public async Task<PublicUserProfile> GetUserProfileAsync(int userId)
+    {
+        SetAuthHeader();
+        var response = await _http.GetAsync($"api/users/{userId}");
+        await EnsureSuccessAsync(response);
+        var profile = (await response.Content.ReadFromJsonAsync<PublicUserProfile>(_jsonOpts))!;
+        if (profile.PhotoUrl is not null)
+            profile.PhotoUrl = AbsoluteUrl(profile.PhotoUrl);
+        return profile;
+    }
+
     public async Task DeletePlanPhotoAsync(int planId, int photoId)
     {
         SetAuthHeader();
