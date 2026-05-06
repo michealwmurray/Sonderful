@@ -1,0 +1,15 @@
+**/.git
+**/.gitignore
+**/.vs
+**/.vscode
+**/bin
+**/obj
+**/out
+**/publish
+**/.DS_Store
+**/node_modules
+**/npm-debug.log
+**/*.user
+**/*.suo
+**/*.userprefs
+**/Thumbs.db
