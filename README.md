@@ -1,5 +1,5 @@
 # Sonderful
-Sonderful is a cross-platform mobile application that helps adults combat social isolation by making it easy to discover and join spontaneous, casual plans with people nearby - a walk, a pint, a coffee, a kickabout. Built with .NET MAUI and ASP.NET Web API, it runs on both Windows and Android.
+Sonderful is a cross-platform mobile application that helps adults combat social isolation by making it easy to discover and join spontaneous, casual plans with people nearby - a walk, a pint, a coffee, a kickabout. Built with .NET MAUI and ASP.NET Core Web API, it runs on both Windows and Android.
 
 ## Screenshots
 
