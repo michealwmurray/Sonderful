@@ -65,4 +65,4 @@ Sonderful.Tests/   - Unit and integration tests
 
 ## Tests
 
-Open Test Explorer in Visual Studio and run all tests. 80 tests covering auth, plans, comments, scoring and integration.
+Open Test Explorer in Visual Studio and run all tests. 82 tests covering auth, plans, comments, scoring and integration.
